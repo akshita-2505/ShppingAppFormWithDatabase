@@ -2,9 +2,11 @@ import {SET_USER_LIST, SET_USER_DATA, SET_LOADER} from "./types";
 
 export const getUser = () => {
     return (dispatch, getState) => {
+        dispatch({type: SET_LOADER,payload: true});
         return fetch('http://localhost:3000/users')
             .then((response) => response.json())
             .then((responseJson) => {
+                dispatch({type: SET_LOADER,payload: false});
                 dispatch({
                     type: SET_USER_LIST,
                     payload: responseJson.data
@@ -35,6 +37,33 @@ export const userRegistration = (userData) => {
                     type: SET_USER_DATA,
                     payload: responseJson.data
                 });
+                return Promise.resolve(true);
+            })
+            .catch((error) => {
+                dispatch({
+                    type: SET_LOADER,
+                    payload: false
+                });
+                return Promise.reject(error);
+            });
+    };
+};
+
+export const deleteUser = (userData) => {
+    return (dispatch, getState) => {
+        dispatch({type: REMOVE_CONTACT,
+            payload: true});
+        return fetch('http://localhost:3000/users/' + userData ,
+            {
+                method : 'DELETE',
+                headers : {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                // body: JSON.stringify(userData)
+            }).then((response) => response.json())
+            .then((responseJson) => {
+                dispatch({type: SET_LOADER,payload: false});
                 return Promise.resolve(true);
             })
             .catch((error) => {

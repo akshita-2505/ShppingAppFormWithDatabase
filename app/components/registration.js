@@ -24,11 +24,13 @@ class Registration extends Component<Props> {
             password:''
         }
     }
-
+// ,age,phone_number,email,password
+//     age: parseInt(age),phone_number,email,password
     register = () =>{
-        const {firstName, lastName,gender,age,phone_number,email,password} = this.state;
-        this.props.userRegistration({firstName, lastName,gender,
-            age: parseInt(age),phone_number,email,password}).then(res=>{
+
+        const {firstName, lastName, gender} = this.state;
+        this.props.userRegistration({firstName, lastName, gender}).then(res=>{
+
             const {navigation} = this.props;
             navigation.dispatch(StackActions.reset({
                 index: 0,
@@ -36,23 +38,38 @@ class Registration extends Component<Props> {
             }));
 
         }).catch(err=>{
+
             alert("Registration failed")
         })
     };
-
-    phoneValidation=()=>{
-        const reg = /^[0-9]{10}$/;
-        if (reg.test(this.state.phone_number) === true) {
-            this.emailValidation()
-        }
-    }
-    emailValidation= () =>
-    {
-        const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        if (reg.test(this.state.email) === true) {
-            this.checkPass()
-        }else{}
-    }
+    // firstNameValidation=()=>{
+    //     const reg = /^[A-za-z]$/;
+    //     if (reg.test(this.state.firstName) === true) {
+    //         if (reg.test(this.state.lastName) === true) {
+    //             this.emailValidation()
+    //         }
+    //     }
+    //     else{}
+    // }
+    // ageValidation=()=>{
+    //     const reg = /^[0-9]{2}$/;
+    //     if (reg.test(this.state.age) === true) {
+    //         this.emailValidation()
+    //     }
+    // }
+    // phoneValidation=()=>{
+    //     const reg = /^[0-9]{10}$/;
+    //     if (reg.test(this.state.phone_number) === true) {
+    //         this.emailValidation()
+    //     }
+    // }
+    // emailValidation= () =>
+    // {
+    //     const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    //     if (reg.test(this.state.email) === true) {
+    //         this.checkPass()
+    //     }else{}
+    // }
     // passValidation=()=>{
     //     debugger
     //     const reg = /^.*(?=.{8,})(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).*$/;
@@ -97,40 +114,40 @@ class Registration extends Component<Props> {
                     />
                 </View>
 
-                <TextInput
-                    placeholder="age"
-                    onChangeText={email => this.setState({email})}
-                    underlineColorAndroid='transparent'
-                    style={styles.TextInputStyleClass}
-                />
+                {/*<TextInput*/}
+                    {/*placeholder="age"*/}
+                    {/*onChangeText={email => this.setState({email})}*/}
+                    {/*underlineColorAndroid='transparent'*/}
+                    {/*style={styles.TextInputStyleClass}*/}
+                {/*/>*/}
 
-                <TextInput
-                    placeholder="phoneNo"
-                    onChangeText={age => this.setState({age})}
-                    underlineColorAndroid='transparent'
-                    style={styles.TextInputStyleClass}
-                />
-                <TextInput
-                    placeholder="Enter email"
-                    onChangeText={age => this.setState({age})}
-                    underlineColorAndroid='transparent'
-                    style={styles.TextInputStyleClass}
-                />
-                <TextInput
-                    placeholder="Enter password"
-                    onChangeText={age => this.setState({age})}
-                    underlineColorAndroid='transparent'
-                    style={styles.TextInputStyleClass}
-                />
-                <TextInput
-                    placeholder="confirm password"
-                    onChangeText={age => this.setState({age})}
-                    underlineColorAndroid='transparent'
-                    style={styles.TextInputStyleClass}
-                />
+                {/*<TextInput*/}
+                    {/*placeholder="phoneNo"*/}
+                    {/*onChangeText={age => this.setState({age})}*/}
+                    {/*underlineColorAndroid='transparent'*/}
+                    {/*style={styles.TextInputStyleClass}*/}
+                {/*/>*/}
+                {/*<TextInput*/}
+                    {/*placeholder="Enter email"*/}
+                    {/*onChangeText={age => this.setState({age})}*/}
+                    {/*underlineColorAndroid='transparent'*/}
+                    {/*style={styles.TextInputStyleClass}*/}
+                {/*/>*/}
+                {/*<TextInput*/}
+                    {/*placeholder="Enter password"*/}
+                    {/*onChangeText={age => this.setState({age})}*/}
+                    {/*underlineColorAndroid='transparent'*/}
+                    {/*style={styles.TextInputStyleClass}*/}
+                {/*/>*/}
+                {/*<TextInput*/}
+                    {/*placeholder="confirm password"*/}
+                    {/*onChangeText={age => this.setState({age})}*/}
+                    {/*underlineColorAndroid='transparent'*/}
+                    {/*style={styles.TextInputStyleClass}*/}
+                {/*/>*/}
 
                 <Button title="Click Here To Register"
-                        onPress={this.phoneValidation}
+                        onPress={()=>{this.register()}}
                         disabled={loading}
                         color="#2196F3" />
                 {

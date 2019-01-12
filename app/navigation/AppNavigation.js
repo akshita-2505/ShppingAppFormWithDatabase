@@ -7,7 +7,7 @@ const AppNavigator = createStackNavigator({
     UserRegistration,
     Users
 },{
-    initialRouteName: 'UserRegistration'
+    initialRouteName: 'Users'
 });
 
 const NavigationContainer = createAppContainer(AppNavigator);

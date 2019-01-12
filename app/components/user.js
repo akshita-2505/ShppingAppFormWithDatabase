@@ -4,6 +4,9 @@ import {FlatList, StyleSheet,
     TouchableOpacity} from 'react-native';
 import { connect } from 'react-redux';
 import {getUser} from "../actions/userAction";
+import {deleteUser} from "../actions/userAction";
+
+import {NavigationActions, StackActions} from "react-navigation";
 
 class Users extends PureComponent {
 
@@ -52,14 +55,32 @@ class Users extends PureComponent {
         this.props.navigation.navigate('UserDetails',{userDetail: item});
     };
 
+    deleteData=(id)=>{
+        this.props.deleteUser({id}).then(res=>{
+             const {navigation} = this.props;
+            navigation.dispatch(contactAction.deleteContact(id));
+
+        }).catch(err=>{
+            alert("delete failed")
+        })
+    }
+
     renderItem = ({item, index}) => {
         const {rowContainer} = styles;
         return(
             <TouchableOpacity onPress={()=>this.onRowClick(item)}>
                 <View key={index} style={rowContainer}>
-                    <Text style={{fontSize: 25}}>
-                        {item.name}</Text>
-                    <Text style={{fontSize: 25}}>{item.email}</Text>
+                    <Text style={{fontSize: 20}}>
+                        FirstName: {item.firstName}</Text>
+                    <Text style={{fontSize: 20}}>Email: {item.email}</Text>
+                    <Text style={{fontSize: 20}}>id: {item.id}</Text>
+                    <TouchableOpacity onPress={this.deleteData(item.id)}>
+                        <Text>Delete</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Text>Update</Text>
+                    </TouchableOpacity>
+
                 </View>
             </TouchableOpacity>
         )
@@ -68,9 +89,6 @@ class Users extends PureComponent {
     render() {
         const {refreshing} = this.state;
         const {userList} = this.props;
-
-        // console.log(this.props);
-
         return (
             <View style={styles.container}>
                 <FlatList data={userList}
@@ -117,5 +135,6 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps,{
-    getUser
+    getUser,
+    deleteUser
 })(Users);
