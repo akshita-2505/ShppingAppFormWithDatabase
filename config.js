@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {View,Image} from 'react-native';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';

@@ -1,4 +1,9 @@
-import { SET_USER_LIST, SET_LOADER, SET_USER_DATA } from "../actions/types";
+import {SET_USER_LIST,
+    SET_LOADER,
+    SET_USER_DATA,
+    REMOVE_CONTACT,
+    SET_LOGIN_DATA
+} from "../actions/types";
 
 const INITIAL_STATE = {
     userList: [],
@@ -26,7 +31,18 @@ export default (state = INITIAL_STATE, action) => {
                 userData: action.payload
             }
         }
+        case REMOVE_CONTACT:{
+            return{
+                ...state
+            }
+        }
+        case SET_LOGIN_DATA:{
+            return{
+                ...state,
+                userList: action.payload
+            }
+        }
         default:
-            return state;
+            return state
     }
 }

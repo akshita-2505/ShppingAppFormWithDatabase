@@ -1,13 +1,18 @@
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import Users from '../components/user';
-import UsersDetails from '../components/userDetail';
 import UserRegistration from '../components/registration';
+import Login from '../components/login';
+import Signup from '../components/signup';
+import Welcome from '../components/welcome';
 
 const AppNavigator = createStackNavigator({
     UserRegistration,
-    Users
+    Users,
+    Login,
+    Signup,
+    Welcome
 },{
-    initialRouteName: 'Users'
+    initialRouteName: 'Welcome'
 });
 
 const NavigationContainer = createAppContainer(AppNavigator);

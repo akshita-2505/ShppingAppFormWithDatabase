@@ -3,10 +3,7 @@ import {FlatList, StyleSheet,
     Text, View, Button,
     TouchableOpacity} from 'react-native';
 import { connect } from 'react-redux';
-import {getUser} from "../actions/userAction";
-import {deleteUser} from "../actions/userAction";
-
-import {NavigationActions, StackActions} from "react-navigation";
+import {getUser,deleteUser,updateUser,getUserById} from "../actions/userAction";
 
 class Users extends PureComponent {
 
@@ -52,17 +49,20 @@ class Users extends PureComponent {
     };
 
     onRowClick = (item) => {
-        this.props.navigation.navigate('UserDetails',{userDetail: item});
+        // this.props.navigation.navigate('Users',{userDetail: item});
     };
 
     deleteData=(id)=>{
         this.props.deleteUser({id}).then(res=>{
              const {navigation} = this.props;
-            navigation.dispatch(contactAction.deleteContact(id));
+            navigation.dispatch(deleteUser(id));
 
         }).catch(err=>{
-            alert("delete failed")
+            alert("Delete successFully")
         })
+    }
+    updateData=(item)=>{
+        this.props.navigation.navigate('UserRegistration',{item : item});
     }
 
     renderItem = ({item, index}) => {
@@ -74,10 +74,10 @@ class Users extends PureComponent {
                         FirstName: {item.firstName}</Text>
                     <Text style={{fontSize: 20}}>Email: {item.email}</Text>
                     <Text style={{fontSize: 20}}>id: {item.id}</Text>
-                    <TouchableOpacity onPress={this.deleteData(item.id)}>
+                    <TouchableOpacity onPress={()=>this.deleteData(item.id)}>
                         <Text>Delete</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={()=>this.updateData(item)}>
                         <Text>Update</Text>
                     </TouchableOpacity>
 
@@ -136,5 +136,7 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps,{
     getUser,
-    deleteUser
+    deleteUser,
+    updateUser,
+    getUserById
 })(Users);
