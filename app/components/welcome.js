@@ -1,45 +1,57 @@
 import React, {PureComponent} from 'react';
-import { StyleSheet,Dimensions,
-    Text, View, Button,TouchableOpacity
+import { StyleSheet,
+     View, Button,TouchableOpacity
 } from 'react-native';
 import { connect } from 'react-redux';
+import { BottomNavigation, Text } from 'react-native-paper';
+import { Container, Left, Right, Icon, Item, Input } from 'native-base';
+import {createAppContainer, createDrawerNavigator} from 'react-navigation';
+import UserRegistration from '../components/registration';
 
-import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
+const Home = () => <Text>Home</Text>;
+const Cart = () => <Text>Cart</Text>;
 
-const FirstRoute = () => (
-    <View style={[styles.scene, { backgroundColor: '#ff4081' }]} />
-);
-const SecondRoute = () => (
-    <View style={[styles.scene, { backgroundColor: '#673ab7' }]} />
-);
 export default class Welcome extends PureComponent {
-
     constructor(props){
         super(props);
         this.state={
             index: 0,
             routes: [
-                { key: 'first', title: 'First' },
-                { key: 'second', title: 'Second' },
+                { key: 'home', title: 'Home', icon: 'home' },
+                { key: 'cart', title: 'Cart', icon: 'shopping-cart' },
             ],
         }
     }
-    render() {
+    static navigationOptions = {
+        visibility:true,
+        headerTintColor: 'black',
+        headerLeft: <TouchableOpacity onPress={()=>{}}>
+            <Icon active name='menu' style={{color: "#6B8E23",marginLeft:10}}/>
+            </TouchableOpacity>,
+        headerRight:<TouchableOpacity>
+            <Icon active name='menu' style={{color: "#6B8E23",marginRight:10}}/>
+        </TouchableOpacity>
 
+    };
+
+    _handleIndexChange = index => this.setState({ index });
+
+    _renderScene = BottomNavigation.SceneMap({
+        home: Home,
+        cart: Cart
+    });
+    render() {
+        const {navigate} = this.props.navigation;
        return (
-           <TabView
+           <BottomNavigation
                navigationState={this.state}
-               renderScene={SceneMap({
-                   first: FirstRoute,
-                   second: SecondRoute,
-               })}
-               onIndexChange={index => this.setState({ index })}
-               initialLayout={{ width: Dimensions.get('window').width }}
-           />
+               onIndexChange={this._handleIndexChange}
+               renderScene={this._renderScene}
+            />
+
        );
     }
 }
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
