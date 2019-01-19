@@ -80,7 +80,6 @@ class Users extends PureComponent {
                     <TouchableOpacity onPress={()=>this.updateData(item)}>
                         <Text>Update</Text>
                     </TouchableOpacity>
-
                 </View>
             </TouchableOpacity>
         )

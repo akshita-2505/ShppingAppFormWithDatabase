@@ -7,9 +7,6 @@ import {NavigationActions, StackActions} from "react-navigation";
 import {connect} from "react-redux";
 import {userRegistration} from "../actions/userAction";
 
-
-
-
 class Signup extends Component {
     constructor(props) {
         super(props);
@@ -25,16 +22,14 @@ class Signup extends Component {
         };
     }
     register = () =>{
-        //validation here...
-        if(!this.signup()) {
-
+        if(!this.validation()) {
             const {firstName, email, password, type} = this.state;
 
             this.props.userRegistration({firstName, email, password, type}).then(res => {
                 const {navigation} = this.props;
                 navigation.dispatch(StackActions.reset({
                     index: 0,
-                    actions: [NavigationActions.navigate({routeName: 'Users'})],
+                    actions: [NavigationActions.navigate({routeName: 'Product'})],
                 }));
             }).catch(err => {
                 alert("Registration failed")
@@ -55,7 +50,7 @@ class Signup extends Component {
 
 
                         <View style={{marginBottom: 35,alignItems:"center", width: '100%'}}>
-                            <Text style={{fontSize: 24, fontWeight: 'bold', textAlign: 'center', width: '100%', color: "#FFA500"}}>Create your account </Text>
+                            <Text style={{fontSize: 24, fontWeight: 'bold', textAlign: 'center', width: '100%', color: "#FFA500"}}>Registration</Text>
 
                         </View>
 
@@ -92,6 +87,9 @@ class Signup extends Component {
                             <TouchableOpacity onPress={() => this.register()} style={{backgroundColor: "transprant", marginTop: 20,width:"100%",height:30,textAlign: 'center'}}>
                                 <Text style={{color: '#D2691E',textAlign: 'center',paddingTop: 5,fontSize:20}}>Signup</Text>
                             </TouchableOpacity>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')} style={{backgroundColor: "transprant", marginTop: 20,width:"100%",height:30}}>
+                                <Text style={{color: '#fdfdfd',textAlign: 'center',paddingTop: 5}}>Already have account?</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </ScrollView>
@@ -99,7 +97,7 @@ class Signup extends Component {
         );
     }
 
-    signup() {
+    validation() {
         if(this.state.email===""||this.state.name===""||this.state.password===""||this.state.rePassword==="") {
             this.setState({hasError: true, errorText: 'Please fill all fields !'});
             return true;

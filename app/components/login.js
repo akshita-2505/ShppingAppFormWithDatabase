@@ -12,12 +12,10 @@ import {deleteUser, getUser, userLogin} from "../actions/userAction";
 import { Container, Left,View, Right, Button, Icon, Item, Input } from 'native-base';
 import {NavigationActions, StackActions} from "react-navigation";
 
-class Registration extends Component<Props> {
-    static navigationOptions = {
-        title: 'Login',
-        visibility:true
-
-    };
+class Login extends Component<Props> {
+    // static navigationOptions = {
+    //     title: 'Login',
+    // };
 
     constructor(props) {
         super(props);
@@ -39,7 +37,7 @@ class Registration extends Component<Props> {
                     const {navigation} = this.props;
                     navigation.dispatch(StackActions.reset({
                         index: 0,
-                        actions: [NavigationActions.navigate({routeName: 'Users'})],
+                        actions: [NavigationActions.navigate({routeName: 'Profile'})],
                     }));
                 }
             }
@@ -119,4 +117,4 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps,{
     getUser,
     userLogin
-})(Registration);
+})(Login);

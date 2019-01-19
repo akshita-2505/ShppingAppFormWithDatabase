@@ -1,20 +1,22 @@
-import {SET_USER_LIST,
-    SET_USER_DATA,
+import {
+    SET_PRODUCT_LIST,
+    SET_PRODUCT_DATA,
     SET_LOADER,
-    REMOVE_CONTACT,
-    SET_LOGIN_DATA
-    } from "./types";
-import ApiConstant from "../helper/apiConstant";
+    DELETE_PRODUCT_DATA,
+    UPDATE_PRODUCT_DATA,
+    SET_LOGIN_DATA,
+    SET_USER_DATA
+} from "./types";
+import ApiConstant from '../helper/apiConstant';
 
-export const getUser = () => {
+export const getproduct = () => {
     return (dispatch, getState) => {
-        dispatch({type: SET_LOADER,payload: true});
-        return fetch(ApiConstant.baseUrl+ApiConstant.user)
+
+        return fetch(ApiConstant.baseUrl+ApiConstant.product)
             .then((response) => response.json())
             .then((responseJson) => {
-                dispatch({type: SET_LOADER,payload: false});
                 dispatch({
-                    type: SET_USER_LIST,
+                    type: SET_PRODUCT_LIST,
                     payload: responseJson.data
                 });
                 return Promise.resolve(true);
@@ -24,25 +26,27 @@ export const getUser = () => {
             });
     };
 };
-export const userRegistration = (userData) => {
+
+export const productAdd = (productData) => {
+
     return (dispatch, getState) => {
         dispatch({type: SET_LOADER,payload: true});
-        return fetch(ApiConstant.baseUrl+ApiConstant.user,
+        return fetch(ApiConstant.baseUrl+ApiConstant.product,
             {
                 method : 'POST',
                 headers : {
                     'Accept': 'application/json',
-                    'Content-Type': 'application/json'
+                    'Content-Type' : 'multipart/form-data',
                 },
-                body: JSON.stringify(userData)
+                body:productData
             }).then((response) => response.json())
             .then((responseJson) => {
                 dispatch({type: SET_LOADER,payload: false});
                 dispatch({
-                    type: SET_USER_DATA,
-                    payload: responseJson.data
+                    type: SET_PRODUCT_DATA,
+                    payload: responseJson.result
                 });
-                return Promise.resolve(true);
+                return Promise.resolve(responseJson);
             })
             .catch((error) => {
                 dispatch({
@@ -53,7 +57,8 @@ export const userRegistration = (userData) => {
             });
     };
 };
-export const getUserById = (userData) => {
+
+export const getProductById = (userData) => {
     return (dispatch, getState) => {
         dispatch({type: SET_LOADER,payload: true});
         return fetch(ApiConstant.baseUrl+ApiConstant.user + userData.id)
@@ -61,7 +66,7 @@ export const getUserById = (userData) => {
             .then((responseJson) => {
                 dispatch({type: SET_LOADER,payload: false});
                 dispatch({
-                    type: SET_USER_DATA,
+                    type: SET_PRODUCT_DATA,
                     payload: responseJson.data
                 });
                 return Promise.resolve(true);
@@ -72,12 +77,12 @@ export const getUserById = (userData) => {
     };
 };
 
-
-export const deleteUser = (userData) => {
+export const productdelete = (id) => {
     return (dispatch, getState) => {
-        dispatch({type: REMOVE_CONTACT,
-            payload: true});
-        return fetch(ApiConstant.baseUrl+ApiConstant.user + userData.id ,
+        dispatch({type: SET_LOADER,payload: true});
+
+        debugger;
+        return fetch(ApiConstant.baseUrl+ApiConstant.product+(id),
             {
                 method : 'DELETE',
                 headers : {
@@ -86,69 +91,46 @@ export const deleteUser = (userData) => {
                 }
             }).then((response) => response.json())
             .then((responseJson) => {
-                dispatch({type: SET_LOADER,payload: false});
-                return Promise.resolve(true);
-            })
-            .catch((error) => {
+
                 dispatch({
-                    type: SET_LOADER,
-                    payload: false
+                    type: PRODUCT_SIGNIN,
+                    payload: responseJson.result
                 });
+                return Promise.resolve(responseJson);
+            }).catch((error) => {
                 return Promise.reject(error);
             });
     };
 };
 
-export const updateUser = (userData) => {
+
+export const productUpdate = (productData,id) => {
+
     return (dispatch, getState) => {
         dispatch({type: SET_LOADER,payload: true});
-        return fetch(ApiConstant.baseUrl+ApiConstant.user+ userData.id,
+        return fetch(ApiConstant.baseUrl+ApiConstant.product+(id),
             {
-                method : 'PUT',
+                method : 'PATCH',
                 headers : {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(userData)
+                body: JSON.stringify(productData)
             }).then((response) => response.json())
             .then((responseJson) => {
                 dispatch({type: SET_LOADER,payload: false});
                 dispatch({
-                    type: SET_USER_DATA,
-                    payload: responseJson.data
-                });
-                return Promise.resolve(true);
-            })
-            .catch((error) => {
-                dispatch({
-                    type: SET_LOADER,
-                    payload: false
-                });
-                return Promise.reject(error);
-            });
-    };
-};
-
-export const userLogin = (userData) => {
-    return (dispatch, getState) => {
-        return fetch(ApiConstant.baseUrl+ApiConstant.login,
-            {
-                method : 'POST',
-                headers : {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(userData)
-            }).then((response) => response.json())
-            .then((responseJson) => {
-                dispatch({
-                    type: SET_LOGIN_DATA,
-                    payload: responseJson.data
+                    type: UPDATE_PRODUCT_DATA,
+                    payload: responseJson.result
                 });
                 return Promise.resolve(responseJson);
             })
             .catch((error) => {
-                return Promise.reject(false);
+                dispatch({
+                    type: SET_LOADER,
+                    payload: false
+                });
+                return Promise.reject(error);
             });
     };
 };
