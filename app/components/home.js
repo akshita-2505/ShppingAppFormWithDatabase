@@ -1,156 +1,97 @@
 import React, {Component} from 'react';
 import {
     StyleSheet,
-    Text,
-    FlatList,
-    ActivityIndicator,
-    ScrollView,
     Image,
-    Button,
-    View,
     TouchableOpacity,
-    ImageBackground,
-    SafeAreaView
+    ScrollView,
+    View,
+    Text,
+    Picker
 } from 'react-native';
 import {connect} from 'react-redux';
-import {Card} from 'react-native-elements'
-import {getproduct,getProductById} from '../actions/productAction';
-import {deleteUser} from "../actions/userAction";
-import {NavigationActions, StackActions} from "react-navigation";
+import Nav from './common';
+import {Dropdown} from 'react-native-material-dropdown';
+import {getproduct, getProductById} from '../actions/productAction';
+import {getcategory} from '../actions/productAction';
 
 class Home extends Component<Props> {
     constructor(props) {
         super(props);
         this.state = {
-            refreshing: false,
-            productList: []
+            productList: [],
+            refreshing: false
         }
     }
 
-    keyExtractor = (item) => {
-        return item.id + "";
-    };
-
-    componentDidMount() {
-        this.props.getproduct()
-    }
-
-    renderSeparator = ({leadingItem, section}) => {
-        return <View style={{height: 2}}/>;
-    };
-
-    renderEmpty = () => {
-        return <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-            <Text style={{fontSize: 15, color: 'white'}}>
-                {"No data found"}
-            </Text>
-        </View>
-    };
-
-    onRefresh = () => {
-        this.setState({refreshing: true});
+    renderItem() {
         this.props.getproduct().then(res => {
-            this.setState({refreshing: false});
-        });
-    };
-
-    onRowClick = (item) => {
-        // this.props.navigation.navigate('Users',{userDetail: item});
-    };
-
-    getOneProduct=(id)=>{
-        this.props.getProductById({id}).then(res => {
-            const {navigation} = this.props;
-            navigation.dispatch(StackActions.reset({
-                index: 0,
-                actions: [NavigationActions.navigate({routeName: 'ProductDetail'})],
-            }));
-        }).catch(err => {
-            alert("failed")
+            res.map((item, index) => {
+                var imageUrl = item.image.split("/");
+                var url = "http://localhost:4000/" + imageUrl[imageUrl.length - 1].toString();
+                return (
+                    <View key={index} style={{flex: 2, backgroundColor: 'yellow'}}>
+                        <Image source={{uri: url}} style={{width: 200, height: 200, backgroundColor: "#475766"}}/>
+                        <Text>{item.name}</Text>
+                    </View>
+                )
+            })
         })
     }
 
-    renderItem = ({item, index}) => {
-        const {navigate} = this.props.navigation;
-        const uri = item.image.split("/");
-        let imageUri = 'http://localhost:3000/' + uri[uri.length - 1].toString();
-        return (
-            <Card style={{backgroundColor: "red" }}>
-                <View style={{flex:1,flexDirection: 'row'}}>
-                    <View style={{flex: 1,backgroundColor:'skyblue',borderRadius:10,borderWidth: 1}}>
-                        <Image source={{uri: imageUri}} style={{height: '100%', width: '100%'}}/>
-                    </View>
-                    <View style={{flex: 1.4}}>
-                        <Text style={{marginBottom: 10,marginLeft: 5,fontWeight:'bold',fontSize:17}}>
-                            ${item.price}
-                        </Text>
-                        <Text style={{marginBottom: 10,marginLeft: 5}}>
-                            Detail:{item.detail}
-                        </Text>
-                        <View style={{backgroundColor:'#D2691E',marginBottom:0,marginLeft: 5,color:"black"}}>
-                        <TouchableOpacity onPress={()=>{this.getOneProduct(item.id)}} style={{alignItems: "center",justifyContent:'center',height:35}}>
-                            <Text style={{fontSize:17}}>
-                                View
-                            </Text>
-                        </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-            </Card>
-        )
-    }
-
     render() {
+        let category = [
+            {value: 'Eletronices'},
+            {value: 'Clothes'}];
+        let subcategory = [
+            {value: 'laptop'},
+            {value: 'mobile'},
+            {value: 'jeans'},
+            {value: 'top'}];
         const {productList} = this.props;
         return (
-            <ImageBackground source={require('../image/bg.jpg')} style={{width: '100%', height: '100%'}}>
-                <SafeAreaView>
-
-                    <View style={styles.container}>
-                        <View style={{backgroundColor:'#D2691E',height:40}}/>
-                        <ScrollView>
-                        <FlatList data={productList}
-                                  contentContainerStyle={{top: 10}}
-                                  automaticallyAdjustContentInsets={false}
-                                  renderItem={this.renderItem}
-                                  keyExtractor={this.keyExtractor}
-                                  ItemSeparatorComponent={this.renderSeparator}
-                                  ListEmptyComponent={this.renderEmpty}
-                                  ListFooterComponent={<View style={{height: 30}}/>}
+            <View style={{flex: 1}}>
+                <Nav/>
+                <View style={{flex: 1}}>
+                    <View style={{
+                        height: 60,
+                        justifyContent: 'center',
+                        marginLeft: 10,
+                        marginRight: 10,
+                        flex:1}}>
+                        <Dropdown
+                            label='Category'
+                            data={category}
                         />
-                        </ScrollView>
                     </View>
-                </SafeAreaView>
-            </ImageBackground>
+                    <View style={{
+                        height: 60,
+                        justifyContent: 'center',
+                        marginLeft: 10,
+                        marginRight: 10,
+                        flex:1
+                    }}>
+                        <Dropdown
+                            label='Subcategory'
+                            data={subcategory}
+                            onChangeText={() => {
+                                this.renderItem()
+                            }}
+                        />
+                    </View>
+                    <View style={{
+                        backgroundColor: 'green',
+                        height: 60,
+                        justifyContent: 'center',
+                        marginLeft: 10,
+                        marginRight: 10,
+                        flex:7
+                    }}>
+                    </View>
+                </View>
+            </View>
         );
-    }
+     }
 }
-
-const styles = StyleSheet.create({
-
-    MainContainer: {
-        justifyContent: 'center',
-        flex: 1,
-        margin: 10
-    },
-
-    TextInputStyleClass: {
-        textAlign: 'center',
-        marginBottom: 7,
-        height: 45,
-        borderWidth: 1,
-        borderColor: '#2196F3',
-        borderRadius: 25,
-        color: "white"
-    },
-
-    title: {
-        fontSize: 22,
-        color: "#009688",
-        textAlign: 'center',
-        marginBottom: 15
-    }
-});
 
 const mapStateToProps = (state) => {
     const {productList} = state.product;
@@ -161,5 +102,5 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps, {
     getproduct,
-                            getProductById
 })(Home);
+

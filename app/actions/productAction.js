@@ -10,8 +10,9 @@ import {
 import ApiConstant from '../helper/apiConstant';
 
 export const getproduct = () => {
-    return (dispatch, getState) => {
 
+    return (dispatch, getState) => {
+debugger
         return fetch(ApiConstant.baseUrl+ApiConstant.product)
             .then((response) => response.json())
             .then((responseJson) => {
@@ -19,7 +20,7 @@ export const getproduct = () => {
                     type: SET_PRODUCT_LIST,
                     payload: responseJson.data
                 });
-                return Promise.resolve(true);
+                return Promise.resolve(responseJson.data);
             })
             .catch((error) => {
                 alert(error);

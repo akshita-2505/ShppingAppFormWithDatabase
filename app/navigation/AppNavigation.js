@@ -4,8 +4,10 @@ import UserRegistration from '../components/registration';
 import Login from '../components/login';
 import Signup from '../components/signup';
 import Product from '../components/product';
-import Home from '../components/home';
+import CatProduct from '../components/catProduct';
 import ProductDetail from '../components/productDetail';
+import Home from '../components/home';
+import Common from '../components/common';
 
 const AppNavigator = createStackNavigator({
     Signup,
@@ -14,7 +16,9 @@ const AppNavigator = createStackNavigator({
     Users,
     Product,
     Home,
-    ProductDetail
+    ProductDetail,
+    CatProduct,
+    Common
 },{
     initialRouteName:'Home',
     headerMode:'none'
