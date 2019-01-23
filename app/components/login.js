@@ -32,12 +32,14 @@ class Login extends Component<Props> {
         this.props.userLogin({email, password}).then(result => {
 
             if (result) {
-                if (JSON.stringify(result.type)) {
+                if (JSON.stringify(result.type) == 0) {
                     const {navigation} = this.props;
                     navigation.dispatch(StackActions.reset({
                         index: 0,
                         actions: [NavigationActions.navigate({ routeName: 'Tab', params: { username: email } })],
                     }));
+                }else{
+                    alert("admin")
                 }
             }
 

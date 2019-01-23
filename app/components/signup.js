@@ -27,10 +27,14 @@ class Signup extends Component {
 
             this.props.userRegistration({firstName, email, password, type}).then(res => {
                 const {navigation} = this.props;
-                navigation.dispatch(StackActions.reset({
-                    index: 0,
-                    actions: [NavigationActions.navigate({routeName: 'Tab'})],
-                }));
+                if(type == 0) {
+                    navigation.dispatch(StackActions.reset({
+                        index: 0,
+                        actions: [NavigationActions.navigate({routeName: 'Tab'})],
+                    }));
+                }else{
+
+                }
             }).catch(err => {
                 alert("Registration failed")
             })
