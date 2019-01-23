@@ -29,7 +29,7 @@ class Signup extends Component {
                 const {navigation} = this.props;
                 navigation.dispatch(StackActions.reset({
                     index: 0,
-                    actions: [NavigationActions.navigate({routeName: 'Product'})],
+                    actions: [NavigationActions.navigate({routeName: 'Tab'})],
                 }));
             }).catch(err => {
                 alert("Registration failed")
@@ -39,7 +39,7 @@ class Signup extends Component {
 
     render() {
         return(
-            <ImageBackground source={require('../image/bg.jpg')} style={{width: '100%', height: '100%'}}>
+
 
                 <ScrollView contentContainerStyle={{flexGrow: 1}}>
                     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', paddingLeft: 50, paddingRight: 50}}>
@@ -50,32 +50,32 @@ class Signup extends Component {
 
 
                         <View style={{marginBottom: 35,alignItems:"center", width: '100%'}}>
-                            <Text style={{fontSize: 24, fontWeight: 'bold', textAlign: 'center', width: '100%', color: "#FFA500"}}>Registration</Text>
+                            <Text style={{fontSize: 24, fontWeight: 'bold', textAlign: 'center', width: '100%', color: "#0055ff"}}>Registration</Text>
 
                         </View>
 
                         <Item>
-                            <Icon active name='ios-man' style={{color: '#6B8E23'}} />
-                            <Input placeholder='Name' onChangeText={(firstName) => this.setState({firstName})} placeholderTextColor="#6B8E23" style={{color:'#6B8E23'}}/>
+                            <Icon active name='ios-man' style={{color: '#003399'}} />
+                            <Input placeholder='Name' onChangeText={(firstName) => this.setState({firstName})} placeholderTextColor="#80aaff" style={{color:'#6B8E23'}}/>
                         </Item>
 
                         <Item>
-                            <Icon active name='ios-mail' style={{color: '#6B8E23'}} />
-                            <Input placeholder='Email' onChangeText={(email) => this.setState({email})} keyboardType="email-address" placeholderTextColor="#6B8E23" style={{color:'#6B8E23'}}/>
+                            <Icon active name='ios-mail' style={{color: '#003399'}} />
+                            <Input placeholder='Email' onChangeText={(email) => this.setState({email})} keyboardType="email-address" placeholderTextColor="#80aaff" style={{color:'#6B8E23'}}/>
                         </Item>
 
                         <Item>
-                            <Icon active name='ios-lock' style={{color: '#6B8E23'}} />
-                            <Input placeholder='Password' onChangeText={(password) => this.setState({password})} secureTextEntry={true} placeholderTextColor="#6B8E23" style={{color:'#6B8E23'}}/>
+                            <Icon active name='ios-lock' style={{color: '#003399'}} />
+                            <Input placeholder='Password' onChangeText={(password) => this.setState({password})} secureTextEntry={true} placeholderTextColor="#80aaff" style={{color:'#6B8E23'}}/>
                         </Item>
                         <Item>
-                            <Icon active name='ios-lock' style={{color: '#6B8E23'}} />
-                            <Input placeholder='Confirm password' onChangeText={(coPassword) => this.setState({coPassword})} secureTextEntry={true} placeholderTextColor="#6B8E23" style={{color:'#6B8E23'}}/>
+                            <Icon active name='ios-lock' style={{color: '#003399'}} />
+                            <Input placeholder='Confirm password' onChangeText={(coPassword) => this.setState({coPassword})} secureTextEntry={true} placeholderTextColor="#80aaff" style={{color:'#6B8E23'}}/>
                         </Item>
 
                         <Item>
-                            <Icon active name='ios-person' style={{color: '#6B8E23'}} />
-                            <Input placeholder='Admin' disabled={true} secureTextEntry={true} placeholderTextColor="#6B8E23" />
+                            <Icon active name='ios-person' style={{color: '#003399'}} />
+                            <Input placeholder='Admin' disabled={true} secureTextEntry={true} placeholderTextColor="#80aaff" />
                             <Switch
                                 onValueChange = {(type) => this.setState({type})}
                                 value = {this.state.type}/>
@@ -85,15 +85,14 @@ class Signup extends Component {
                         {this.state.hasError?<Text style={{color: "#c0392b", textAlign: 'center', marginTop: 10}}>{this.state.errorText}</Text>:null}
                         <View style={{alignItems: 'center',width:"100%",justifyContent:"center"}}>
                             <TouchableOpacity onPress={() => this.register()} style={{backgroundColor: "transprant", marginTop: 20,width:"100%",height:30,textAlign: 'center'}}>
-                                <Text style={{color: '#D2691E',textAlign: 'center',paddingTop: 5,fontSize:20}}>Signup</Text>
+                                <Text style={{color: '#003399',textAlign: 'center',paddingTop: 5,fontSize:20,fontWeight: 'bold'}}>Signup</Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')} style={{backgroundColor: "transprant", marginTop: 20,width:"100%",height:30}}>
-                                <Text style={{color: '#fdfdfd',textAlign: 'center',paddingTop: 5}}>Already have account?</Text>
+                                <Text style={{color: '#80aaff',textAlign: 'center',paddingTop: 5}}>Already have account?</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
                 </ScrollView>
-            </ImageBackground>
         );
     }
 

@@ -10,9 +10,7 @@ import {
 import ApiConstant from '../helper/apiConstant';
 
 export const getproduct = () => {
-
     return (dispatch, getState) => {
-debugger
         return fetch(ApiConstant.baseUrl+ApiConstant.product)
             .then((response) => response.json())
             .then((responseJson) => {
@@ -27,7 +25,25 @@ debugger
             });
     };
 };
-
+export const getProductById = (userData) => {
+    debugger
+    return (dispatch, getState) => {
+        dispatch({type: SET_LOADER,payload: true});
+        return fetch(ApiConstant.baseUrl+ApiConstant.product + (userData.id))
+            .then((response) => response.json())
+            .then((responseJson) => {
+                dispatch({type: SET_LOADER,payload: false});
+                dispatch({
+                    type: SET_PRODUCT_DATA,
+                    payload: responseJson.data
+                });
+                return Promise.resolve(true);
+            })
+            .catch((error) => {
+                alert(error);
+            });
+    };
+};
 export const productAdd = (productData) => {
 
     return (dispatch, getState) => {
@@ -59,24 +75,7 @@ export const productAdd = (productData) => {
     };
 };
 
-export const getProductById = (userData) => {
-    return (dispatch, getState) => {
-        dispatch({type: SET_LOADER,payload: true});
-        return fetch(ApiConstant.baseUrl+ApiConstant.user + userData.id)
-            .then((response) => response.json())
-            .then((responseJson) => {
-                dispatch({type: SET_LOADER,payload: false});
-                dispatch({
-                    type: SET_PRODUCT_DATA,
-                    payload: responseJson.data
-                });
-                return Promise.resolve(true);
-            })
-            .catch((error) => {
-                alert(error);
-            });
-    };
-};
+
 
 export const productdelete = (id) => {
     return (dispatch, getState) => {

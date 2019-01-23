@@ -1,248 +1,129 @@
 import React, { Component } from 'react';
-import {StyleSheet,
-    View,
-    TextInput,
-    Button,
-    Text,
-    ActivityIndicator,
-    Image,
-    ImageBackground,
-    SafeAreaView} from 'react-native';
-import {connect} from 'react-redux';
-import {updateUser, userRegistration ,getUser} from "../actions/userAction";
-import { NavigationActions, StackActions } from 'react-navigation';
+import {ScrollView, Text, TouchableOpacity, Switch, ImageBackground} from 'react-native';
+import { View, Left, Right, Button, Icon, Item, Input} from 'native-base';
 import * as Animatable from 'react-native-animatable';
-// import ICON from ''
-import RadioForm from 'react-native-simple-radio-button';
+import IconM from 'react-native-vector-icons/MaterialIcons';
+import {NavigationActions, StackActions} from "react-navigation";
+import {connect} from "react-redux";
+import {userRegistration} from "../actions/userAction";
 
-
-var radio_props = [
-    {label: 'Male', value: 0 },
-    {label: 'Female', value: 1 }
-];
-class Registration extends Component<Props> {
-    static navigationOptions = {
-        title: 'Registration',
-        visibility:true
-
-    };
-
+class Registration extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data:this.props.navigation.getParam("item","NO_ID"),
-            firstName: '',
-            lastName: '',
-            gender:'',
-            age: '',
-            phone_number:'',
             email: '',
-            password:'',
-        }
-    }
-    componentDidMount(){
-        this.setState({firstName:this.state.data.firstName})
-        this.setState({lastName:this.state.data.lastName})
-        this.setState({gender:this.state.data.gender})
-    }
+            firstName: '',
+            password: '',
+            coPassword: '',
+            hasError: false,
+            errorText: '',
+            type: false,
 
-// ,age,phone_number,email,password
-//     age: parseInt(age),phone_number,email,password
+        };
+    }
     register = () =>{
+        if(!this.validation()) {
+            const {firstName, email, password, type} = this.state;
 
-        const {phone_number,email} = this.state;
-        this.props.userRegistration({phone_number,email}).then(res=>{
-
-            const {navigation} = this.props;
-            navigation.dispatch(StackActions.reset({
-                index: 0,
-                actions: [NavigationActions.navigate({ routeName: 'Users' })],
-            }));
-        }).catch(err=>{
-            alert("Registration failed")
-        })
+            this.props.userRegistration({firstName, email, password, type}).then(res => {
+                const {navigation} = this.props;
+                navigation.dispatch(StackActions.reset({
+                    index: 0,
+                    actions: [NavigationActions.navigate({routeName: 'Tab'})],
+                }));
+            }).catch(err => {
+                alert("Registration failed")
+            })
+        }
     };
 
-    updateData=(id)=>{
-        const {phone_number,email} = this.state;
-        this.props.updateUser({id,phone_number,email}).then(res=>{
-            const {navigation} = this.props;
-            navigation.dispatch(StackActions.reset({
-                index: 0,
-                actions: [NavigationActions.navigate({ routeName: 'Users' })],
-            }));
-        }).catch(err=>{
-            alert("update failed")
-        })
-    }
-    // firstNameValidation=()=>{
-    //     const reg = /^[a-zA-Z\s]+$/;
-    //     if (reg.test(this.state.firstName) === true) {
-    //         if (reg.test(this.state.lastName) === true) {
-    //             alert("done")
-    //         }
-    //     }
-    //     else{ alert("Not")}
-    // }
-    // ageValidation=()=>{
-    //     if(isNaN(this.state.age))
-    //     {
-    //         alert("Value is Not Number");
-    //     }
-    //     else
-    //     {
-    //         alert("Value is Number");
-    //     }
-    // }
-    // phoneValidation=()=>{
-    //     const reg = '/^[0-9]{10}+$/';
-    //     if (reg.test(this.state.phone_number) === true) {
-    //         this.emailValidation()
-    //     }
-    // }
-    // emailValidation= () =>
-    // {
-    //     const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    //     if (reg.test(this.state.email) === true) {
-    //         this.checkPass()
-    //     }else{}
-    // }
-    // passValidation=()=>{
-    //     debugger
-    //     const reg = /^.*(?=.{8,})(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).*$/;
-    //     if (reg.test(this.state.password) === true) {
-    //         this.checkPass()
-    //     }
-    // }
-    //
-    // checkPass=()=>{
-    //     if(this.state.password === this.state.cpass){
-    //         this.register()
-    //     }
-    // }
-
     render() {
-        const { loading } = this.props;
-        const { navigation } = this.props;
-
-        return (
-            <ImageBackground source={require('../image/bg.jpg')} style={{width: '100%', height: '100%'}}>
-            <Animatable.View animation="lightSpeedIn" style={styles.MainContainer}>
-
-                <Text style= {styles.title}>User Registration Form</Text>
-
-                {/*<TextInput*/}
-                    {/*placeholder={"FirstName"}*/}
-                    {/*onChangeText={firstName => this.setState({firstName})}*/}
-                    {/*underlineColorAndroid='transparent'*/}
-                    {/*style={styles.TextInputStyleClass}*/}
-                    {/*value={this.state.firstName}*/}
-                {/*/>*/}
-
-                {/*<TextInput*/}
-                    {/*placeholder="LastName"*/}
-                    {/*onChangeText={lastName => this.setState({lastName})}*/}
-                    {/*underlineColorAndroid='transparent'*/}
-                    {/*style={styles.TextInputStyleClass}*/}
-                    {/*value={this.state.lastName}*/}
-                {/*/>*/}
-
-                {/*<View>*/}
-                    {/*<Text style={{color:'#009688',fontSize:17}}>Gender:</Text>*/}
-                    {/*<RadioForm*/}
-                        {/*radio_props={radio_props}*/}
-                        {/*initial={0}*/}
-                        {/*onPress={(gender) => {this.setState({gender})}}*/}
-                        {/*value={this.state.gender}*/}
-                    {/*/>*/}
-                {/*</View>*/}
-
-                {/*<TextInput*/}
-                    {/*placeholder="age"*/}
-                    {/*keyboardType="numeric"*/}
-                    {/*onChangeText={email => this.setState({email})}*/}
-                    {/*underlineColorAndroid='transparent'*/}
-                    {/*style={styles.TextInputStyleClass}*/}
-                {/*/>*/}
-                {/*<Icon name="rocket" size={30} color="#900" />*/}
-                <TextInput
-                    placeholder="phoneNo"
-                    onChangeText={phone_number => this.setState({phone_number})}
-                    placeholderTextColor="white"
-                    underlineColorAndroid='transparent'
-                    style={styles.TextInputStyleClass}
-                />
-                <TextInput
-                    placeholder="Enter email"
-                    placeholderTextColor="white"
-                    onChangeText={email => this.setState({email})}
-                    underlineColorAndroid='transparent'
-                    style={styles.TextInputStyleClass}
-                />
-                {/*<TextInput*/}
-                    {/*placeholder="Enter password"*/}
-                    {/*onChangeText={age => this.setState({age})}*/}
-                    {/*underlineColorAndroid='transparent'*/}
-                    {/*style={styles.TextInputStyleClass}*/}
-                {/*/>*/}
-                {/*<TextInput*/}
-                    {/*placeholder="confirm password"*/}
-                    {/*onChangeText={age => this.setState({age})}*/}
-                    {/*underlineColorAndroid='transparent'*/}
-                    {/*style={styles.TextInputStyleClass}*/}
-                {/*/>*/}
+        return(
 
 
-                <Button title="Submit"
-                        onPress={()=> {
-                            debugger
-                            if (this.state.data.id == undefined)
-                            {
-                                this.register()
-                            } else {
-                                this.updateData(this.state.data.id)
-                            }
-                        }}
-                        disabled={loading}
-                        color="#2196F3" />
+            <ScrollView contentContainerStyle={{flexGrow: 1}}>
+                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', paddingLeft: 50, paddingRight: 50}}>
 
-                {
-                    loading &&
-                    <View style={{top:0, left:0, bottom:0, right:0}}>
-                        <ActivityIndicator animating={true}/>
+                    <Animatable.View animation="" iterationCount={100} direction="alternate">
+                        <IconM active name='shopping-basket' style={{color: '#008B8B'}} size={120}/>
+                    </Animatable.View>
+
+
+                    <View style={{marginBottom: 35,alignItems:"center", width: '100%'}}>
+                        <Text style={{fontSize: 24, fontWeight: 'bold', textAlign: 'center', width: '100%', color: "#0055ff"}}>Registration</Text>
+
                     </View>
-                }
 
-            </Animatable.View>
-            </ImageBackground>
+                    <Item>
+                        <Icon active name='ios-man' style={{color: '#003399'}} />
+                        <Input placeholder='Name' onChangeText={(firstName) => this.setState({firstName})} placeholderTextColor="#003399" style={{color:'#003399'}}/>
+                    </Item>
+
+                    <Item>
+                        <Icon active name='ios-mail' style={{color: '#003399'}} />
+                        <Input placeholder='Email' onChangeText={(email) => this.setState({email})} keyboardType="email-address" placeholderTextColor="#003399" style={{color:'#003399'}}/>
+                    </Item>
+
+                    <Item>
+                        <Icon active name='ios-lock' style={{color: '#003399'}} />
+                        <Input placeholder='Password' onChangeText={(password) => this.setState({password})} secureTextEntry={true} placeholderTextColor="#003399" style={{color:'#003399'}}/>
+                    </Item>
+                    <Item>
+                        <Icon active name='ios-lock' style={{color: '#003399'}} />
+                        <Input placeholder='Confirm password' onChangeText={(coPassword) => this.setState({coPassword})} secureTextEntry={true} placeholderTextColor="#003399" style={{color:'#003399'}}/>
+                    </Item>
+
+                    <Item>
+                        <Icon active name='ios-person' style={{color: '#003399'}} />
+                        <Input placeholder='Admin' disabled={true} secureTextEntry={true} placeholderTextColor="#003399" />
+                        <Switch
+                            onValueChange = {(type) => this.setState({type})}
+                            value = {this.state.type}/>
+
+                    </Item>
+
+                    {this.state.hasError?<Text style={{color: "#c0392b", textAlign: 'center', marginTop: 10}}>{this.state.errorText}</Text>:null}
+                    <View style={{alignItems: 'center',width:"100%",justifyContent:"center"}}>
+                        <TouchableOpacity onPress={() => this.register()} style={{backgroundColor: "transprant", marginTop: 20,width:"100%",height:30,textAlign: 'center'}}>
+                            <Text style={{color: '#D2691E',textAlign: 'center',paddingTop: 5,fontSize:20}}>Signup</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')} style={{backgroundColor: "transprant", marginTop: 20,width:"100%",height:30}}>
+                            <Text style={{color: 'black',textAlign: 'center',paddingTop: 5}}>Already have account?</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </ScrollView>
         );
     }
-}
-const styles = StyleSheet.create({
 
-    MainContainer :{
-        justifyContent: 'center',
-        flex:1,
-        margin: 10
-    },
+    validation() {
+        if(this.state.email===""||this.state.name===""||this.state.password===""||this.state.rePassword==="") {
+            this.setState({hasError: true, errorText: 'Please fill all fields !'});
+            return true;
+        }
+        if(!this.emailValidation(this.state.email)) {
+            this.setState({hasError: true, errorText: 'Please enter a valid email address !'});
+            return true;
+        }
 
-    TextInputStyleClass: {
-        textAlign: 'center',
-        marginBottom: 7,
-        height: 45,
-        borderWidth: 1,
-        borderColor: '#2196F3',
-        borderRadius: 25 ,
-        color: "white"
-    },
-
-    title:{
-        fontSize: 22,
-        color: "#009688",
-        textAlign: 'center',
-        marginBottom: 15
+        if(this.state.password.length < 6) {
+            this.setState({hasError: true, errorText: 'Passwords must contains at least 6 characters !'});
+            return true;
+        }
+        if(this.state.password !== this.state.coPassword) {
+            this.setState({hasError: true, errorText: 'Passwords does not match !'});
+            return true;
+        }
+        return false;
+        this.setState({hasError: false});
+        //  Actions.home();
     }
-});
+
+    emailValidation(email) {
+        var reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return reg.test(email);
+    }
+}
 
 const mapStateToProps = (state) => {
     const {loading} = state.user;
@@ -252,7 +133,5 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps,{
-    userRegistration,
-    updateUser,
-    getUser
+    userRegistration
 })(Registration);

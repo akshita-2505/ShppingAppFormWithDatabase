@@ -1,16 +1,16 @@
-import { SET_LOADER,SET_CATEGORY_LIST } from "../actions/types";
+import { SET_LOADER,SET_SUBCATEGORY_LIST } from "../actions/types";
 
 const INITIAL_STATE = {
-    categoryList: [],
+    subcategoryList: [],
     loading: false
 };
 
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
-        case SET_CATEGORY_LIST:{
+        case SET_SUBCATEGORY_LIST:{
             return{
                 ...state,
-                categoryList: action.payload
+                subcategoryList: action.payload
             }
         }
         case SET_LOADER:{

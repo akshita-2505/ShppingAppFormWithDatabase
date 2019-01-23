@@ -1,17 +1,17 @@
 import {
-    SET_CATEGORY_LIST,
+    SET_SUBCATEGORY_LIST,
     SET_LOADER
 } from "./types";
 import ApiConstant from '../helper/apiConstant';
 
-export const getcategory = () => {
+export const getsubcategory = () => {
     return (dispatch, getState) => {
 
-        return fetch(ApiConstant.baseUrl+ApiConstant.category)
+        return fetch(ApiConstant.baseUrl+ApiConstant.subcategory)
             .then((response) => response.json())
             .then((responseJson) => {
                 dispatch({
-                    type: SET_CATEGORY_LIST,
+                    type: SET_SUBCATEGORY_LIST,
                     payload: responseJson.data
                 });
                 return Promise.resolve(true);
@@ -22,15 +22,15 @@ export const getcategory = () => {
     };
 };
 
-export const getCategoryById = (userData) => {
+export const getsubCategoryById = (userData) => {
     return (dispatch, getState) => {
         dispatch({type: SET_LOADER,payload: true});
-        return fetch(ApiConstant.baseUrl+ApiConstant.category + userData.id)
+        return fetch(ApiConstant.baseUrl+ApiConstant.subcategory + userData.id)
             .then((response) => response.json())
             .then((responseJson) => {
                 dispatch({type: SET_LOADER,payload: false});
                 dispatch({
-                    type: SET_CATEGORY_LIST,
+                    type: SET_SUBCATEGORY_LIST,
                     payload: responseJson.data
                 });
                 return Promise.resolve(true);

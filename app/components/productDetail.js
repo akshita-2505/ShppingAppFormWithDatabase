@@ -1,67 +1,72 @@
-import React, { Component } from 'react';
-import {StyleSheet,
-    TextInput,
-    Text,
-    ActivityIndicator,
-    Image,
+import React, {Component} from 'react';
+import {
+    StyleSheet,
+    View,
+    ScrollView,
     TouchableOpacity,
-    ImageBackground,
-    SafeAreaView} from 'react-native';
+    Text,
+    Image,
+    SafeAreaView
+} from 'react-native';
 import {connect} from 'react-redux';
-import {deleteUser, getUser, userLogin} from "../actions/userAction";
-import { Container, Left,View, Right, Button, Icon, Item, Input } from 'native-base';
-
+import {Body, Container, Header, Left, Right} from "native-base";
+import Icon from "react-native-vector-icons/Entypo";
+import {Title} from "react-native-paper";
 
 class ProductDetail extends Component<Props> {
-        constructor(props) {
+    constructor(props) {
         super(props);
-
+        this.state = {}
     }
 
     render() {
+        const {navigation} = this.props;
+        const productData = navigation.getParam('detail', 'no');
+        const uri = productData.image.split("/");
+        let imageUri = 'http://localhost:3000/' + uri[uri.length - 1].toString();
         return (
-            <ImageBackground source={require('../image/bg.jpg')} style={{width: '100%', height: '100%'}}>
-                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', paddingLeft: 50, paddingRight: 50}}>
+            <Container>
+                <Header>
+                    <TouchableOpacity onPress={() => {
+                    }}>
+                        <Icon name={'menu'} size={30}/></TouchableOpacity>
+                    <Left/>
+                    <Body>
+                    <Title>Unique</Title>
+                    </Body>
+                    <Right/>
 
-                </View>
-            </ImageBackground>
+                </Header>
+                <ScrollView style={{flex: 1}}>
+                    <View style={{alignItems: 'center'}}>
+                        <Image source={{uri: imageUri}} style={{height: '100%', width: '100%', marginTop: 40}}/>
+                    </View>
+                    <Text style={{
+                        fontSize: 23,
+                        fontWeight: 'bold',
+                        marginLeft: 10,
+                        marginTop: 50
+                    }}>${productData.price}</Text>
+                    <Text style={{marginLeft: 10, fontSize: 20, marginTop: 10}}>{productData.name}</Text>
+                    <Text style={{marginLeft: 10, fontSize: 19, marginTop: 10}}>{productData.detail}</Text>
+
+                    <TouchableOpacity style={{alignItems: 'center'}}>
+                        <Text style={{fontSize: 22, marginTop: 25}}>Add to Cart</Text>
+                    </TouchableOpacity>
+
+                </ScrollView>
+            </Container>
         );
     }
 }
-const styles = StyleSheet.create({
 
-    MainContainer :{
-        justifyContent: 'center',
-        flex:1,
-        margin: 10
-    },
-
-    TextInputStyleClass: {
-        textAlign: 'center',
-        marginBottom: 7,
-        height: 45,
-        borderWidth: 1,
-        borderColor: '#2196F3',
-        borderRadius: 25 ,
-        color: "white"
-    },
-
-    title:{
-        fontSize: 22,
-        color: "#009688",
-        textAlign: 'center',
-        marginBottom: 15
-    }
-});
+const styles = StyleSheet.create({});
 
 const mapStateToProps = (state) => {
-    const {loading} = state.user;
+    const {loading} = state.product;
     return {
         loading
     };
 };
 
-export default connect(mapStateToProps,{
-    getUser,
-    userLogin
-})(ProductDetail);
+export default connect(mapStateToProps, {})(ProductDetail);

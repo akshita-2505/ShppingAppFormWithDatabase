@@ -8,7 +8,7 @@ import {getproduct,productAdd} from "../actions/productAction";
 import {NavigationActions, StackActions} from "react-navigation";
 
 
-class Product extends Component {
+class AddProduct extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -84,8 +84,7 @@ class Product extends Component {
     render() {
         var data = [["Electronices","Cloths"]];
         return(
-            <ImageBackground source={require('../image/bg.jpg')} style={{width: '100%', height: '100%'}}>
-                <ScrollView>
+
                 <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', paddingLeft: 50, paddingRight: 50,paddingTop:100}}>
                     <View style={{alignItems:"center", width: '100%',marginTop:20}}>
                         <TouchableOpacity onPress={() =>{this.image()}} >
@@ -105,23 +104,6 @@ class Product extends Component {
                     <Item>
                         <Input placeholder='Detail' onChangeText={(detail) => this.setState({detail})} placeholderTextColor="#6B8E23" style={{color:'#6B8E23'}}/>
                     </Item>
-                    {/*<Item>*/}
-                        {/*<Text style={{color:'#6B8E23'}}>Category:</Text>*/}
-                        {/*<Picker*/}
-                        {/*iosIcon={<Icon name="arrow-down" />}*/}
-                        {/*textStyle={{ color: "#687373" }}*/}
-                        {/*mode="dropdown"*/}
-                        {/*selectedValue={this.state.selected}*/}
-                        {/*onValueChange= {(value) => {*/}
-                        {/*this.setState({ selected: value });*/}
-                        {/*}}>*/}
-                        {/*{this.state.productList.map((item, index) => {*/}
-                        {/*return (<Picker.Item label={item} value={index} key={index}/>)*/}
-                        {/*})}*/}
-                        {/*</Picker>*/}
-
-                    {/*</Item>*/}
-
                     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', paddingLeft: 50, paddingRight: 50}}>
 
                         {this.state.hasError?<Text style={{color: "#c0392b", textAlign: 'center', marginTop: 10}}>{this.state.errorText}</Text>:null}
@@ -132,8 +114,7 @@ class Product extends Component {
                         </View>
                     </View>
                 </View>
-                </ScrollView>
-            </ImageBackground>
+
         );
     }
     validation() {
@@ -157,4 +138,4 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps,{
     getproduct,
     productAdd
-})(Product);
+})(AddProduct);

@@ -23,7 +23,7 @@ export default (state = INITIAL_STATE, action) => {
         case SET_PRODUCT_DATA:{
             return{
                 ...state,
-                productData: action.payload
+                productList: action.payload
             }
         }
         case DELETE_PRODUCT_DATA:{

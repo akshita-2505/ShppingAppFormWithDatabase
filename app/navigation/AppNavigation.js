@@ -1,28 +1,29 @@
-import { createStackNavigator, createAppContainer } from 'react-navigation';
-import Users from '../components/user';
+import { createStackNavigator, createAppContainer ,createDrawerNavigator} from 'react-navigation';
+import Accounts from '../components/account';
 import UserRegistration from '../components/registration';
 import Login from '../components/login';
 import Signup from '../components/signup';
-import Product from '../components/product';
-import CatProduct from '../components/catProduct';
+import Product from '../components/addProduct';
 import ProductDetail from '../components/productDetail';
-import Home from '../components/home';
-import Common from '../components/common';
+import Tab from '../navigation/TabNavigator';
+import SubCategory from '../components/subCategory';
+import Welcome from '../components/welcome';
 
 const AppNavigator = createStackNavigator({
     Signup,
     UserRegistration,
     Login,
-    Users,
+    Accounts,
     Product,
-    Home,
+    Tab,
     ProductDetail,
-    CatProduct,
-    Common
+    SubCategory,
+    Welcome
 },{
-    initialRouteName:'Home',
+    initialRouteName:'Welcome',
     headerMode:'none'
 });
+
 
 const NavigationContainer = createAppContainer(AppNavigator);
 

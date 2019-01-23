@@ -131,7 +131,7 @@ export const updateUser = (userData) => {
 
 export const userLogin = (userData) => {
     return (dispatch, getState) => {
-        return fetch(ApiConstant.baseUrl+ApiConstant.login,
+        return fetch(ApiConstant.baseUrl+ApiConstant.user+ ApiConstant.login,
             {
                 method : 'POST',
                 headers : {
@@ -152,4 +152,3 @@ export const userLogin = (userData) => {
             });
     };
 };
-
