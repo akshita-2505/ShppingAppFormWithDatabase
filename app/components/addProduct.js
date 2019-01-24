@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
-import {ScrollView, Text, TouchableOpacity, Image, ImageBackground} from 'react-native';
-import {View, Left, Right, Button, Icon, Item, Input, Picker} from 'native-base';
+import {ScrollView, Text, TouchableOpacity, Image, Picker} from 'react-native';
+import {View, Left, Right, Button,Container, Item, Input} from 'native-base';
 import IconM from 'react-native-vector-icons/MaterialIcons';
 import {connect} from "react-redux";
 import ImagePicker from 'react-native-image-picker';
 import {getproduct,productAdd} from "../actions/productAction";
 import {NavigationActions, StackActions} from "react-navigation";
-
+import Icon from 'react-native-vector-icons/Feather'
+import IconF from 'react-native-vector-icons/Foundation'
+import Header from '../components/commonHeader';
+import {getcategory} from '../actions/categoryAction';
+import {getsubCategoryById} from '../actions/subcategoryAction';
 
 class AddProduct extends Component {
     constructor(props) {
@@ -21,9 +25,11 @@ class AddProduct extends Component {
             type: false,
             hasError: false,
             errorText: '',
-            cid:1,
+            cid:'',
             selected:"",
-            scid:1
+            scid:'',
+            categoryList: [],
+            subcategoryList: []
         };
     }
     image = () => {
@@ -55,70 +61,124 @@ class AddProduct extends Component {
     }
 
     addproduct=()=>{
-        const {name, quntity, price, detail,cid,scid,image} = this.state;
+debugger
+        // if(!this.validation()) {
+            const {name, quntity, price, detail, cid, scid, image} = this.state;
+            const formData = new FormData();
+            formData.append('image', {
+                uri: image,
+                type: 'image/jpeg',
+                name: 'photo.jpg',
+            });
+            formData.append("name", name);
+            formData.append("cid", cid);
+            formData.append("scid", scid);
+            formData.append("quntity", quntity);
+            formData.append("price", price);
+            formData.append("detail", detail);
 
-        const formData = new FormData();
-        formData.append('image',{
-            uri: image,
-            type: 'image/jpeg',
-            name: 'photo.jpg',
-        });
-        formData.append("name",name);
-        formData.append("cid",cid);
-        formData.append("scid",scid);
-        formData.append("quntity",quntity);
-        formData.append("price",price);
-        formData.append("detail",detail);
-
-        this.props.productAdd(formData).then(res => {
-            const {navigation} = this.props;
-            navigation.dispatch(StackActions.reset({
-                index: 0,
-                actions: [NavigationActions.navigate({ routeName: 'Users' })],
-            }));
-        }).catch(err=>{
-            alert("Registration failed")
-        })
+            this.props.productAdd(formData).then(res => {
+                const {navigation} = this.props;
+                navigation.dispatch(StackActions.reset({
+                    index: 0,
+                    actions: [NavigationActions.navigate({routeName: 'Home'})],
+                }));
+            }).catch(err => {
+                alert("failed")
+            })
+        // }
     }
 
     render() {
-        var data = [["Electronices","Cloths"]];
+        const {categoryList} = this.props;
+        const {subcategoryList} = this.props;
         return(
-
-                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', paddingLeft: 50, paddingRight: 50,paddingTop:100}}>
+            <Container>
+            <Header/>
+            <ScrollView>
+                <View style={{justifyContent:'center',marginLeft:25,marginRight:25,top:30}}>
                     <View style={{alignItems:"center", width: '100%',marginTop:20}}>
                         <TouchableOpacity onPress={() =>{this.image()}} >
-                            <Image source={this.state.image}  style={{borderRadius:50,width:130,height:130,marginLeft:20,backgroundColor:"#475766"}}/>
+                            <Image source={this.state.image}  style={{borderRadius:65,width:130,height:130,marginLeft:20,backgroundColor:"#475766"}}/>
                         </TouchableOpacity>
 
                     </View>
-                    <Item>
-                        <Input placeholder='Product Name' onChangeText={(name) => this.setState({name})} placeholderTextColor="#6B8E23" style={{color:'#6B8E23'}}/>
+                    <Item style={{marginTop:30}}>
+                        <Icon name='shopping-bag' style={{color: '#003399'}} size={30}/>
+                        <Input placeholder='Product Name' onChangeText={(name) => this.setState({name})} placeholderTextColor="#80aaff" style={{color:'#1a62ff'}}/>
                     </Item>
                     <Item>
-                        <Input placeholder='Quntity' onChangeText={(quntity) => this.setState({quntity})} placeholderTextColor="#6B8E23" style={{color:'#6B8E23'}}/>
+                        <Input placeholder='Quntity' onChangeText={(quntity) => this.setState({quntity})} placeholderTextColor="#80aaff" style={{color:'#1a62ff'}}/>
                     </Item>
                     <Item>
-                        <Input placeholder='Price' onChangeText={(price) => this.setState({price})} placeholderTextColor="#6B8E23" style={{color:'#6B8E23'}}/>
+                        <IconF name='price-tag' style={{color: '#003399'}} size={30}/>
+                        <Input placeholder='Price' onChangeText={(price) => this.setState({price})} placeholderTextColor="#80aaff" style={{color:'#1a62ff'}}/>
                     </Item>
                     <Item>
-                        <Input placeholder='Detail' onChangeText={(detail) => this.setState({detail})} placeholderTextColor="#6B8E23" style={{color:'#6B8E23'}}/>
+                        <Input placeholder='Detail' onChangeText={(detail) => this.setState({detail})} placeholderTextColor="#80aaff" style={{color:'#1a62ff'}}/>
                     </Item>
-                    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', paddingLeft: 50, paddingRight: 50}}>
+
+                     <Text style={{marginTop:15,marginBottom: 10,fontSize:15,marginLeft:5,color:'#1a62ff'}}>Category:</Text>
+
+                    {/*<Picker onValueChange = {(cid)=>this.setState({cid})}*/}
+                            {/*selectedValue={this.state.cid}*/}
+                            {/*style={{marginLeft:25}}>*/}
+                        {/*{*/}
+                            {/*this.state.categoryList.map((data) => {*/}
+                                {/*alert(data)*/}
+                            {/*return (*/}
+                                {/*<Picker.Item label={data.name} value={data.cid}/>*/}
+                            {/*)*/}
+                        {/*})*/}
+                        {/*}*/}
+                    {/*</Picker>*/}
+                    <Picker
+                        iosIcon={<Icon name="arrow-down" />}
+                        textStyle={{ color: "#687373" }}
+                        mode="dropdown"
+                        selectedValue={this.state.cid}
+                        onValueChange= {(value) => {
+                            this.setState({ cid: value });
+                        }}>
+                        {
+                            categoryList.map((item,index) => {
+                                return (<Picker.Item label={item.name} value={item.id} key={index}/>)
+                            })
+                        }
+                    </Picker>
+                    <Text style={{marginTop:15,marginBottom: 10,fontSize:15,marginLeft:5,color:'#1a62ff'}}>SubCategory:</Text>
+
+                    <Picker
+                        iosIcon={<Icon name="arrow-down" />}
+                        textStyle={{ color: "#687373" }}
+                        mode="dropdown"
+                        selectedValue={this.state.scid}
+                        onValueChange= {(value) => {
+                            this.setState({ scid: value });
+                        }}>
+                        {
+                            subcategoryList.map((item,index) => {
+                                return (<Picker.Item label={item.name} value={item.id} key={index}/>)
+                            })
+                        }
+                    </Picker>
+
+                    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', paddingLeft: 50, paddingRight: 50,marginTop:30,marginBottom:40}}>
 
                         {this.state.hasError?<Text style={{color: "#c0392b", textAlign: 'center', marginTop: 10}}>{this.state.errorText}</Text>:null}
                         <View style={{alignItems: 'center',width:"100%",justifyContent:"center"}}>
                             <TouchableOpacity onPress={() => this.addproduct()} style={{backgroundColor: "transprant", marginTop: 20,width:"100%",height:30,textAlign: 'center'}}>
-                                <Text style={{color: '#D2691E',textAlign: 'center',paddingTop: 5,paddingLeft:10,fontSize:20}}>Add Product</Text>
+                                <Text style={{color: '#003399',textAlign: 'center',paddingTop: 5,paddingLeft:10,fontSize:22,fontWeight:'bold'}}>Add Product</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
                 </View>
-
+            </ScrollView>
+            </Container>
         );
     }
     validation() {
-        if(this.state.name===""||this.state.detail==="") {
+        if(this.state.name===""||this.state.detail===""||this.state.price===""||this.state.quntity==="") {
             this.setState({hasError: true, errorText: 'Please fill all fields !'});
             return true;
         }
@@ -130,12 +190,16 @@ class AddProduct extends Component {
 
 const mapStateToProps = (state) => {
     const {productList} = state.product;
+    const {categoryList} = state.category;
+    const {subcategoryList} = state.subcategory;
     return {
-        productList
+        productList,categoryList,subcategoryList
     };
 };
 
 export default connect(mapStateToProps,{
     getproduct,
-    productAdd
+    productAdd,
+    getcategory,
+    getsubCategoryById
 })(AddProduct);

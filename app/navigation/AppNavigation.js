@@ -3,25 +3,27 @@ import Accounts from '../components/account';
 import UserRegistration from '../components/registration';
 import Login from '../components/login';
 import Signup from '../components/signup';
-import Product from '../components/addProduct';
 import ProductDetail from '../components/productDetail';
 import Tab from '../navigation/TabNavigator';
 import SubCategory from '../components/subCategory';
 import Welcome from '../components/welcome';
+import AdminTabNavigator from '../navigation/AdminTabNavigator';
+import CommonHeader from '../components/commonHeader';
 
 const AppNavigator = createStackNavigator({
     Signup,
     UserRegistration,
     Login,
     Accounts,
-    Product,
     Tab,
     ProductDetail,
     SubCategory,
-    Welcome
+    Welcome,
+    AdminTabNavigator,
+    CommonHeader
 },{
-    initialRouteName:'Welcome',
-    headerMode:'none'
+    initialRouteName:'AdminTabNavigator',
+    headerMode: 'none'
 });
 
 

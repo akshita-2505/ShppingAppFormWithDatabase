@@ -9,7 +9,8 @@ import {
     SafeAreaView
 } from 'react-native';
 import {connect} from 'react-redux';
-import {Body, Container, Header, Left, Right} from "native-base";
+import {Body, Container,  Left, Right} from "native-base";
+import Header from './commonHeader';
 import Icon from "react-native-vector-icons/Entypo";
 import {Title} from "react-native-paper";
 
@@ -26,17 +27,7 @@ class ProductDetail extends Component<Props> {
         let imageUri = 'http://localhost:3000/' + uri[uri.length - 1].toString();
         return (
             <Container>
-                <Header>
-                    <TouchableOpacity onPress={() => {
-                    }}>
-                        <Icon name={'menu'} size={30}/></TouchableOpacity>
-                    <Left/>
-                    <Body>
-                    <Title>Unique</Title>
-                    </Body>
-                    <Right/>
-
-                </Header>
+                <Header/>
                 <ScrollView style={{flex: 1}}>
                     <View style={{alignItems: 'center'}}>
                         <Image source={{uri: imageUri}} style={{height: '100%', width: '100%', marginTop: 40}}/>

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import {ScrollView, Text, TouchableOpacity, Switch, ImageBackground} from 'react-native';
+import {ScrollView, Text, TouchableOpacity, Switch, ImageBackground, AsyncStorage} from 'react-native';
 import { View, Left, Right, Button, Icon, Item, Input} from 'native-base';
 import * as Animatable from 'react-native-animatable';
 import IconM from 'react-native-vector-icons/MaterialIcons';
 import {NavigationActions, StackActions} from "react-navigation";
 import {connect} from "react-redux";
-import {userRegistration} from "../actions/userAction";
+import {updateUser,userRegistration} from "../actions/userAction";
 
 class Registration extends Component {
     constructor(props) {
@@ -21,21 +21,52 @@ class Registration extends Component {
 
         };
     }
-    register = () =>{
-        if(!this.validation()) {
-            const {firstName, email, password, type} = this.state;
+    register = async () => {
+        try {
+            // const username = await AsyncStorage.getItem('user');
+            // alert(username)
+            // if ((JSON.parse(username).login) !== 'no') {
+            //     if(!this.validation()) {
+            //         const {firstName, email, password, type} = this.state;
+            //         const {navigation} = this.props;
+            //         this.props.updateUser({firstName, email, password, type}).then(result => {
+            //             alert("successfully updated")
+            //         }).catch(err => {
+            //             alert("not updated")
+            //         })
+            //     }
+            // }else{
+                if(!this.validation()) {
+                    const {firstName, email, password, type} = this.state;
+                    const {navigation} = this.props;
+                    this.props.userRegistration({firstName, email, password, type}).then(result => {
+                        if (result) {
+                            if(result.type==true){
+                                this.props.navigation.dispatch(StackActions.reset({
+                                    index: 0,
+                                    actions: [NavigationActions.navigate({ routeName: 'AdminTabNavigator', params: { username: email,type: 'true'} })],
+                                }));
+                            }else if(result.type==false){
+                                this.props.navigation.dispatch(StackActions.reset({
+                                    index: 0,
+                                    actions: [NavigationActions.navigate({ routeName: 'Tab', params: { username: email,type: 'true'} })],
+                                }));
+                            }else{
 
-            this.props.userRegistration({firstName, email, password, type}).then(res => {
-                const {navigation} = this.props;
-                navigation.dispatch(StackActions.reset({
-                    index: 0,
-                    actions: [NavigationActions.navigate({routeName: 'Tab'})],
-                }));
-            }).catch(err => {
-                alert("Registration failed")
-            })
+                            }
+                        }
+
+                    }).catch(err => {
+                        alert("Registration failed")
+                    })
+
+
+                }
+        //     }
+        }catch{
+
         }
-    };
+    }
 
     render() {
         return(
@@ -50,7 +81,7 @@ class Registration extends Component {
 
 
                     <View style={{marginBottom: 35,alignItems:"center", width: '100%'}}>
-                        <Text style={{fontSize: 24, fontWeight: 'bold', textAlign: 'center', width: '100%', color: "#0055ff"}}>Registration</Text>
+                        <Text style={{fontSize: 24, fontWeight: 'bold', textAlign: 'center', width: '100%', color: "#00134d"}}>Registration</Text>
 
                     </View>
 
@@ -133,5 +164,6 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps,{
+    updateUser,
     userRegistration
 })(Registration);

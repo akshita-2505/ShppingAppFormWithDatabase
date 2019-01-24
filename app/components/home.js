@@ -12,15 +12,15 @@ import {
 } from 'react-native';
 import {connect} from 'react-redux';
 import {getcategory} from '../actions/categoryAction';
-import Icon from "react-native-vector-icons/Entypo";
-import {Container, Header,Left,Body,Right} from "native-base";
-import {Title} from "react-native-paper";
-import DrawerNavigator from '../navigation/DrawerNavigator';
+import {Container, Left,Body,Right} from "native-base";
+import Header from '../components/commonHeader';
 
 class Home extends Component{
-    // static navigationOptions = {
-    //     headerMode:'none'
-    // };
+    static navigationOptions = {
+        // headerMode:'none',
+        header: null
+            // { visible:false }
+    };
     constructor(props) {
         super(props);
         this.state = {
@@ -40,10 +40,12 @@ class Home extends Component{
     }
 
     storeData = async () => {
+        debugger
         const {navigation} = this.props;
         const login = navigation.getParam('username','no')
+        const type = navigation.getParam('type','No-type')
         try {
-            await AsyncStorage.setItem('username', login);
+            await AsyncStorage.setItem('user', JSON.stringify({login:login,type:type}));
         } catch (error) {
             alert("async error");
         }
@@ -93,17 +95,8 @@ class Home extends Component{
 
         return (
             <Container>
-                <Header>
-                    <TouchableOpacity onPress={()=>{}}>
-                        <Icon name={'menu'} size={30}/></TouchableOpacity>
-                    <Left/>
-                    <Body>
-                    <Title>Unique</Title>
-                    </Body>
-                    <Right />
-
-                </Header>
-                <View style={{height:40,backgroundColor:'#80aaff',justifyContent: 'center'}}><Text style={{fontSize:20,fontWeight: 'bold',marginLeft:10}}>Category</Text></View>
+                <Header/>
+                <View style={{height:40,backgroundColor:'#ccddff',justifyContent: 'center'}}><Text style={{fontSize:20,fontWeight: 'bold',marginLeft:10}}>Category</Text></View>
                     <FlatList data={categoryList}
                               horizontal={false}
                               contentContainerStyle={{top: 10}}

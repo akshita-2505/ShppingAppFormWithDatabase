@@ -10,6 +10,7 @@ import {connect} from 'react-redux';
 import {deleteUser, getUser, userLogin} from "../actions/userAction";
 import {Container, Left, View, Right, Icon, Item, Input} from 'native-base';
 import {NavigationActions, StackActions} from "react-navigation";
+import ThemeColor from './themeColor';
 
 class Login extends Component<Props> {
     // static navigationOptions = {
@@ -24,22 +25,24 @@ class Login extends Component<Props> {
         }
     }
     checkPass = (email, password) => {
-        debugger
         if (this.state.email === "" || this.state.password === "") {
             this.setState({hasError: true, errorText: 'Please fill all fields !'});
             return true;
         }
         this.props.userLogin({email, password}).then(result => {
-
             if (result) {
-                if (JSON.stringify(result.type) == 0) {
-                    const {navigation} = this.props;
-                    navigation.dispatch(StackActions.reset({
+                if(result.type==true){
+                    this.props.navigation.dispatch(StackActions.reset({
+                                index: 0,
+                                actions: [NavigationActions.navigate({ routeName: 'AdminTabNavigator', params: { username: email,type: 'true'} })],
+                            }));
+                }else if(result.type==false){
+                    this.props.navigation.dispatch(StackActions.reset({
                         index: 0,
-                        actions: [NavigationActions.navigate({ routeName: 'Tab', params: { username: email } })],
+                        actions: [NavigationActions.navigate({ routeName: 'Tab', params: { username: email,type: 'true'} })],
                     }));
                 }else{
-                    alert("admin")
+
                 }
             }
 
@@ -51,7 +54,9 @@ class Login extends Component<Props> {
 
     render() {
         return (
+
             <SafeAreaView style={{flex: 1,marginRight: 10}}>
+
                 <TouchableOpacity onPress={()=>{this.props.navigation.navigate('Tab')}}>
                     <Text style={{top:10,alignSelf: 'flex-end',fontSize:20,color:'#b3cbff'}}>Skip</Text>
                 </TouchableOpacity>
@@ -69,18 +74,18 @@ class Login extends Component<Props> {
                             fontWeight: 'bold',
                             textAlign: 'center',
                             width: '100%',
-                            color: "#0055ff"
+                            color: "#00134d"
                         }}>Welcome </Text>
                     </View>
                     <Item>
                         <Icon active name='ios-person' style={{color: "#003399"}}/>
                         <Input placeholder='Username' onChangeText={(email) => this.setState({email})}
-                               placeholderTextColor="#80aaff" style={{color: "black"}}/>
+                               placeholderTextColor="#80aaff" style={{color: "#1a62ff"}}/>
                     </Item>
                     <Item>
                         <Icon active name='ios-lock' style={{color: "#003399"}}/>
                         <Input placeholder='Password' onChangeText={(password) => this.setState({password})}
-                               secureTextEntry={true} placeholderTextColor="#80aaff" style={{color: "black"}}/>
+                               secureTextEntry={true} placeholderTextColor="#80aaff" style={{color: "#1a62ff"}}/>
                     </Item>
                     {this.state.hasError ? <Text style={{
                         color: "#c0392b",

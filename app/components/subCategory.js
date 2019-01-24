@@ -9,8 +9,8 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import {connect} from 'react-redux';
-import Icon from "react-native-vector-icons/Entypo";
-import {Container, Header, Left, Body, Right} from "native-base";
+import Header from '../components/commonHeader';
+import {Container, Left, Body, Right} from "native-base";
 import {Title} from "react-native-paper";
 import {getsubCategoryById} from '../actions/subcategoryAction';
 import {getproduct,getProductById} from '../actions/productAction';
@@ -83,7 +83,8 @@ class SubCategory extends Component {
         const {navigate} = this.props.navigation;
         const uri = item.image.split("/");
         let imageUri = 'http://localhost:3000/' + uri[uri.length - 1].toString();
-        return (
+        if(!item.scid){
+            return (
             <View style={{borderRadius: 10, borderWidth: 0.5, height: 100, width: 100, margin: 10}}>
                 <TouchableOpacity onPress={() => this.onRowClick(item)}>
                     <Image key={index} source={{uri: imageUri}}
@@ -92,27 +93,30 @@ class SubCategory extends Component {
 
                 </TouchableOpacity>
             </View>
+            )}else{
+            return (
+                <View style={{borderRadius: 10, borderWidth: 0.5, height: 100, width: 100, margin: 10,marginVertical: 30}}>
+                    <TouchableOpacity onPress={() => this.onRowClick(item)}>
+                        <Image key={index} source={{uri: imageUri}}
+                               style={{height: '100%', width: '100%',opacity:1}}/>
+                        <View>
+                            <Text style={{fontSize:15}}>${item.price}</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
 
 
-        )
+            )
+        }
+
     }
 
     render() {
         const {navigation} = this.props;
         return (
             <Container>
-                {/*<Header>*/}
-                    {/*<TouchableOpacity onPress={() => {*/}
-                    {/*}}>*/}
-                        {/*<Icon name={'menu'} size={30}/></TouchableOpacity>*/}
-                    {/*<Left/>*/}
-                    {/*<Body>*/}
-                    {/*<Title>SCategory</Title>*/}
-                    {/*</Body>*/}
-                    {/*<Right/>*/}
-
-                {/*</Header>*/}
-                <View style={{height:40,backgroundColor:'#80aaff',justifyContent: 'center'}}><Text style={{fontSize:20,fontWeight: 'bold',marginLeft:10}}>SubCategory</Text></View>
+                <Header/>
+                <View style={{height:40,backgroundColor:'#ccddff',justifyContent: 'center'}}><Text style={{fontSize:20,fontWeight: 'bold',marginLeft:10}}>SubCategory</Text></View>
                 <View style={{height: 150}}>
                     <FlatList data={this.props.subcategoryList}
                               horizontal={true}
@@ -123,11 +127,10 @@ class SubCategory extends Component {
                               ListEmptyComponent={this.renderEmpty}
                     />
                 </View>
-                <View style={{height:40,backgroundColor:'#80aaff',justifyContent: 'center'}}><Text style={{fontSize:20,fontWeight: 'bold',marginLeft:10}}>Products</Text></View>
+                <View style={{height:40,backgroundColor:'#ccddff',justifyContent: 'center'}}><Text style={{fontSize:20,fontWeight: 'bold',marginLeft:10}}>Products</Text></View>
                 <View style={{flex: 1}}>
                     <FlatList data={this.props.productList}
                               horizontal={false}
-                        // style={{backgroundColor:'black'}}
                               contentContainerStyle={{top: 5}}
                               automaticallyAdjustContentInsets={false}
                               renderItem={this.renderItem}

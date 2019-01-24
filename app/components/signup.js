@@ -25,15 +25,20 @@ class Signup extends Component {
         if(!this.validation()) {
             const {firstName, email, password, type} = this.state;
 
-            this.props.userRegistration({firstName, email, password, type}).then(res => {
+            this.props.userRegistration({firstName, email, password, type}).then(result => {
                 const {navigation} = this.props;
-                if(type == 0) {
-                    navigation.dispatch(StackActions.reset({
-                        index: 0,
-                        actions: [NavigationActions.navigate({routeName: 'Tab'})],
-                    }));
-                }else{
-
+                if (result) {
+                    if (JSON.stringify(result.type) == 0) {
+                        navigation.dispatch(StackActions.reset({
+                            index: 0,
+                            actions: [NavigationActions.navigate({ routeName: 'Tab', params: { username: email } })],
+                        }));
+                    }else{
+                        navigation.dispatch(StackActions.reset({
+                            index: 0,
+                            actions: [NavigationActions.navigate({ routeName: 'AdminTabNavigator' })],
+                        }));
+                    }
                 }
             }).catch(err => {
                 alert("Registration failed")
@@ -54,27 +59,27 @@ class Signup extends Component {
 
 
                         <View style={{marginBottom: 35,alignItems:"center", width: '100%'}}>
-                            <Text style={{fontSize: 24, fontWeight: 'bold', textAlign: 'center', width: '100%', color: "#0055ff"}}>Registration</Text>
+                            <Text style={{fontSize: 24, fontWeight: 'bold', textAlign: 'center', width: '100%', color: "#00134d"}}>Registration</Text>
 
                         </View>
 
                         <Item>
                             <Icon active name='ios-man' style={{color: '#003399'}} />
-                            <Input placeholder='Name' onChangeText={(firstName) => this.setState({firstName})} placeholderTextColor="#80aaff" style={{color:'#6B8E23'}}/>
+                            <Input placeholder='Name' onChangeText={(firstName) => this.setState({firstName})} placeholderTextColor="#80aaff" style={{color:'#1a62ff'}}/>
                         </Item>
 
                         <Item>
                             <Icon active name='ios-mail' style={{color: '#003399'}} />
-                            <Input placeholder='Email' onChangeText={(email) => this.setState({email})} keyboardType="email-address" placeholderTextColor="#80aaff" style={{color:'#6B8E23'}}/>
+                            <Input placeholder='Email' onChangeText={(email) => this.setState({email})} keyboardType="email-address" placeholderTextColor="#80aaff" style={{color:'#1a62ff'}}/>
                         </Item>
 
                         <Item>
                             <Icon active name='ios-lock' style={{color: '#003399'}} />
-                            <Input placeholder='Password' onChangeText={(password) => this.setState({password})} secureTextEntry={true} placeholderTextColor="#80aaff" style={{color:'#6B8E23'}}/>
+                            <Input placeholder='Password' onChangeText={(password) => this.setState({password})} secureTextEntry={true} placeholderTextColor="#80aaff" style={{color:'#1a62ff'}}/>
                         </Item>
                         <Item>
                             <Icon active name='ios-lock' style={{color: '#003399'}} />
-                            <Input placeholder='Confirm password' onChangeText={(coPassword) => this.setState({coPassword})} secureTextEntry={true} placeholderTextColor="#80aaff" style={{color:'#6B8E23'}}/>
+                            <Input placeholder='Confirm password' onChangeText={(coPassword) => this.setState({coPassword})} secureTextEntry={true} placeholderTextColor="#80aaff" style={{color:'#1a62ff'}}/>
                         </Item>
 
                         <Item>

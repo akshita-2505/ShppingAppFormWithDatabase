@@ -1,16 +1,18 @@
 import Homepage from '../components/home'
 import Accounts from "../components/account";
-
+import AddProduct from '../components/addProduct';
 import IconI from "react-native-vector-icons/Ionicons";
 import IconF from "react-native-vector-icons/FontAwesome";
 import React from "react";
 import { createAppContainer,createBottomTabNavigator } from 'react-navigation';
 
-const TabNavigator = createBottomTabNavigator({
+const AdminTabNavigator = createBottomTabNavigator({
     Home:{screen:Homepage},
+
+    Product:{screen:AddProduct},
     Account:{screen:Accounts}
-    },{
-    initialRouteName:'Home',
+},{
+    initialRouteName:'Product',
     defaultNavigationOptions: ({ navigation }) => ({
         tabBarIcon: ({ focused, horizontal, tintColor }) => {
             const { routeName } = navigation.state;
@@ -19,6 +21,9 @@ const TabNavigator = createBottomTabNavigator({
             if (routeName === 'Home') {
                 IconComponent= IconI;
                 iconName = 'ios-home';
+            }else if (routeName === 'Product') {
+                IconComponent = IconF;
+                iconName = 'plus-square-o';
             } else if (routeName === 'Account') {
                 IconComponent = IconF;
                 iconName = 'user';
@@ -28,12 +33,12 @@ const TabNavigator = createBottomTabNavigator({
         },
     }),
     tabBarOptions: {
-        activeTintColor: '#00004d',
+        activeTintColor: '#003399',
         inactiveTintColor: '#99b9ff',
         style: {
             height: 60,
             paddingVertical: 5,
-            backgroundColor: "#8080ff"
+            backgroundColor: "white"
         },
         labelStyle: {
             fontSize: 12,
@@ -42,4 +47,4 @@ const TabNavigator = createBottomTabNavigator({
         }
     }});
 
-export default createAppContainer(TabNavigator);
+export default createAppContainer(AdminTabNavigator);
