@@ -1,6 +1,6 @@
 import Homepage from '../components/home'
 import Accounts from "../components/account";
-import AddProduct from '../components/addProduct';
+import AdminChoise from '../components/adminChoise';
 import IconI from "react-native-vector-icons/Ionicons";
 import IconF from "react-native-vector-icons/FontAwesome";
 import React from "react";
@@ -8,11 +8,12 @@ import { createAppContainer,createBottomTabNavigator } from 'react-navigation';
 
 const AdminTabNavigator = createBottomTabNavigator({
     Home:{screen:Homepage},
-
-    Product:{screen:AddProduct},
+    Product:{screen:AdminChoise},
     Account:{screen:Accounts}
 },{
-    initialRouteName:'Product',
+    initialRouteName:'Home',
+    header: null,
+    headerMode: 'none',
     defaultNavigationOptions: ({ navigation }) => ({
         tabBarIcon: ({ focused, horizontal, tintColor }) => {
             const { routeName } = navigation.state;
@@ -33,8 +34,8 @@ const AdminTabNavigator = createBottomTabNavigator({
         },
     }),
     tabBarOptions: {
-        activeTintColor: '#003399',
-        inactiveTintColor: '#99b9ff',
+        activeTintColor: '#3F43A6',
+        inactiveTintColor: 'gray',
         style: {
             height: 60,
             paddingVertical: 5,

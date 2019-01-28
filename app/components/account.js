@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import {TouchableOpacity, StyleSheet, Text, AsyncStorage} from "react-native";
-import {Container, Header, Content, View} from 'native-base';
+import {Container, Content, View} from 'native-base';
 import {Title} from "react-native-paper";
 import {deleteUser} from '../actions/userAction';
 import {connect} from "react-redux";
+import Header from './commonHeader';
+import Dialog, { DialogContent } from 'react-native-popup-dialog';
 
 class Account extends Component {
     constructor(props) {
@@ -13,33 +15,34 @@ class Account extends Component {
     }
     async logout(username) {
         try {
-            await AsyncStorage.removeItem('username');
+            await AsyncStorage.removeItem('user');
             this.props.navigation.navigate('Login')
         }
         catch(error) {
             console.log(error)
         }
     }
-    // getData = async () => {
-    //     try {
-    //         const value = await AsyncStorage.getItem('username');
-    //         if (value !== null) {
-    //             this.props.deleteUser({value})
-    //         }
-    //         else{
-    //             this.props.navigation.navigate('Login')
-    //         }
-    //     }catch(error){
-    //         console.log(error)
-    //     }
-    // }
+    getData = async () => {
+        debugger
+        try {
+            const value = await AsyncStorage.getItem('user');
+            const email = (JSON.parse(value).login);
+            if (email !== 'no') {
+                this.props.deleteUser({email})
+                this.props.navigation.navigate('Login');
+            }
+            else{
+                this.props.navigation.navigate('Login')
+            }
+        }catch(error){
+            alert("no")
+        }
+    }
 
     render() {
         return (
             <Container>
-                <Header>
-                    <Title>Account</Title>
-                </Header>
+                <Header/>
                 <Content>
                     <View>
                         <TouchableOpacity style={styles.container} onPress={()=>{this.props.navigation.navigate('UserRegistration')}}>
@@ -48,7 +51,7 @@ class Account extends Component {
                         <TouchableOpacity style={styles.container} onPress={()=>{this.logout()}}>
                             <Text style={styles.text}>Logout</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.container} onPress={()=>{}}>
+                        <TouchableOpacity style={styles.container} onPress={()=>{this.getData()}}>
                             <Text style={styles.text}>Delete Account</Text>
                         </TouchableOpacity>
 
@@ -62,10 +65,10 @@ const styles = StyleSheet.create({
     container: {
         padding: 10,
         marginTop: 3,
-        backgroundColor: '#EEEEEE',
+        backgroundColor: '#ccddff',
     },
     text: {
-        color: 'black',
+        color: '#002066',
         fontWeight:'bold',
         fontSize:15,
         marginLeft:15

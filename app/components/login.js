@@ -4,7 +4,7 @@ import {
     Text,
     ActivityIndicator,
     TouchableOpacity,
-    SafeAreaView
+    SafeAreaView, AsyncStorage
 } from 'react-native';
 import {connect} from 'react-redux';
 import {deleteUser, getUser, userLogin} from "../actions/userAction";
@@ -24,6 +24,17 @@ class Login extends Component<Props> {
             password: '',
         }
     }
+    storeData = async (result) => {
+        const {navigation} = this.props;
+        // const login = navigation.getParam('username','no')
+        // const type = navigation.getParam('type','No-type')
+        try {
+            await AsyncStorage.setItem('user', JSON.stringify(result));
+        } catch (error) {
+            alert("async error");
+        }
+    }
+
     checkPass = (email, password) => {
         if (this.state.email === "" || this.state.password === "") {
             this.setState({hasError: true, errorText: 'Please fill all fields !'});
@@ -32,6 +43,7 @@ class Login extends Component<Props> {
         this.props.userLogin({email, password}).then(result => {
             if (result) {
                 if(result.type==true){
+                    this.storeData(result)
                     this.props.navigation.dispatch(StackActions.reset({
                                 index: 0,
                                 actions: [NavigationActions.navigate({ routeName: 'AdminTabNavigator', params: { username: email,type: 'true'} })],
@@ -47,7 +59,7 @@ class Login extends Component<Props> {
             }
 
         }).catch(err => {
-            alert("Email and Password Wrong");
+            alert("Email or Password Wrong");
         })
 
     }

@@ -9,6 +9,8 @@ import SubCategory from '../components/subCategory';
 import Welcome from '../components/welcome';
 import AdminTabNavigator from '../navigation/AdminTabNavigator';
 import CommonHeader from '../components/commonHeader';
+import AddProduct from '../components/addProduct';
+import ShowAdminProduct from '../components/showAdminProduct';
 
 const AppNavigator = createStackNavigator({
     Signup,
@@ -20,10 +22,13 @@ const AppNavigator = createStackNavigator({
     SubCategory,
     Welcome,
     AdminTabNavigator,
-    CommonHeader
+    CommonHeader,
+    AddProduct,
+    ShowAdminProduct
 },{
-    initialRouteName:'AdminTabNavigator',
+    initialRouteName:'Welcome',
     headerMode: 'none'
+    // headerMode : 'screen'
 });
 
 

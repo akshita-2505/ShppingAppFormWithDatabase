@@ -7,10 +7,11 @@ import React from "react";
 import { createAppContainer,createBottomTabNavigator } from 'react-navigation';
 
 const TabNavigator = createBottomTabNavigator({
-    Home:{screen:Homepage},
+    Home:{screen:Homepage,navigationOptions:{header:null}},
     Account:{screen:Accounts}
     },{
     initialRouteName:'Home',
+    headerMode: 'none',
     defaultNavigationOptions: ({ navigation }) => ({
         tabBarIcon: ({ focused, horizontal, tintColor }) => {
             const { routeName } = navigation.state;
@@ -28,12 +29,12 @@ const TabNavigator = createBottomTabNavigator({
         },
     }),
     tabBarOptions: {
-        activeTintColor: '#00004d',
-        inactiveTintColor: '#99b9ff',
+        activeTintColor: '#3F43A6',
+        inactiveTintColor: 'gray',
         style: {
             height: 60,
             paddingVertical: 5,
-            backgroundColor: "#8080ff"
+            backgroundColor: "white"
         },
         labelStyle: {
             fontSize: 12,

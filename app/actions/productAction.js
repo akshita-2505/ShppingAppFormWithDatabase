@@ -26,7 +26,6 @@ export const getproduct = () => {
     };
 };
 export const getProductById = (userData) => {
-    debugger
     return (dispatch, getState) => {
         dispatch({type: SET_LOADER,payload: true});
         return fetch(ApiConstant.baseUrl+ApiConstant.product + (userData.id))
@@ -45,7 +44,7 @@ export const getProductById = (userData) => {
     };
 };
 export const productAdd = (productData) => {
-
+debugger
     return (dispatch, getState) => {
         dispatch({type: SET_LOADER,payload: true});
         return fetch(ApiConstant.baseUrl+ApiConstant.product,

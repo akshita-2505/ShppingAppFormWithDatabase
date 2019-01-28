@@ -74,10 +74,11 @@ export const getUserById = (userData) => {
 
 
 export const deleteUser = (userData) => {
+    debugger
     return (dispatch, getState) => {
         dispatch({type: REMOVE_CONTACT,
             payload: true});
-        return fetch(ApiConstant.baseUrl+ApiConstant.user + userData.id ,
+        return fetch(ApiConstant.baseUrl+ApiConstant.user + userData.email ,
             {
                 method : 'DELETE',
                 headers : {

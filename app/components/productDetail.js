@@ -9,7 +9,7 @@ import {
     SafeAreaView
 } from 'react-native';
 import {connect} from 'react-redux';
-import {Body, Container,  Left, Right} from "native-base";
+import {Body, Container, Left, Right} from "native-base";
 import Header from './commonHeader';
 import Icon from "react-native-vector-icons/Entypo";
 import {Title} from "react-native-paper";
@@ -30,7 +30,7 @@ class ProductDetail extends Component<Props> {
                 <Header/>
                 <ScrollView style={{flex: 1}}>
                     <View style={{alignItems: 'center'}}>
-                        <Image source={{uri: imageUri}} style={{height: '100%', width: '100%', marginTop: 40}}/>
+                        <Image source={{uri: imageUri}} style={{height: 300, width: '100%', marginTop: 40}}/>
                     </View>
                     <Text style={{
                         fontSize: 23,
@@ -42,7 +42,11 @@ class ProductDetail extends Component<Props> {
                     <Text style={{marginLeft: 10, fontSize: 19, marginTop: 10}}>{productData.detail}</Text>
 
                     <TouchableOpacity style={{alignItems: 'center'}}>
-                        <Text style={{fontSize: 22, marginTop: 25}}>Add to Cart</Text>
+                        <Text style={{
+                            fontSize: 22, marginTop: 25, marginBottom: 20,
+                            color: '#002066',
+                            fontWeight: 'bold',
+                        }}>Add to Cart</Text>
                     </TouchableOpacity>
 
                 </ScrollView>

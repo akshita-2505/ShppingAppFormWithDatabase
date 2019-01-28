@@ -14,24 +14,24 @@ export default class Welcome extends Component {
     constructor(props) {
         super(props);
     }
-    componentDidMount(): void {
+    componentWillMount(): void {
         this.getData()
     }
 
     getData = async () => {
         try {
             const username = await AsyncStorage.getItem('user');
-            if ((JSON.parse(username).login) !== 'no') {
+            if (username !== null) {
 
-                if ((JSON.parse(username)).type == 'false') {
+                if (JSON.parse(username).type == false) {
 
                     this.props.navigation.navigate('Tab')
-                } else if ((JSON.parse(username)).type == 'true') {
+                } else if (JSON.parse(username).type == true) {
 
                     this.props.navigation.navigate('AdminTabNavigator')
                 }
             } else {
-                this.props.navigation.navigate('Login')
+                 this.props.navigation.navigate('Login')
             }
         } catch (error) {
             console.log(error)

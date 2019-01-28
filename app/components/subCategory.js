@@ -11,13 +11,12 @@ import {
 import {connect} from 'react-redux';
 import Header from '../components/commonHeader';
 import {Container, Left, Body, Right} from "native-base";
-import {Title} from "react-native-paper";
-import {getsubCategoryById} from '../actions/subcategoryAction';
+import {getsubCategoryByIdOnHome} from '../actions/subcategoryAction';
 import {getproduct,getProductById} from '../actions/productAction';
 
 class SubCategory extends Component {
     static navigationOptions = {
-        title: 'Unique',
+        headerMode:'float'
     };
     constructor(props) {
         super(props);
@@ -35,7 +34,7 @@ class SubCategory extends Component {
     componentDidMount() {
         const {navigation} = this.props;
         const id = navigation.getParam('id','No-Id');
-        this.props.getsubCategoryById({id})
+        this.props.getsubCategoryByIdOnHome({id})
         this.props.getproduct()
     }
 
@@ -51,19 +50,17 @@ class SubCategory extends Component {
         </View>
     };
 
-    // onRefresh = () => {
-    //     this.setState({refreshing: true});
-    //     this.props.getsubcategory().then(res => {
-    //         this.setState({refreshing: false});
-    //     });
-    //     this.props.getproduct().then(res => {
-    //         this.setState({refreshing: false});
-    //     });
-    // };
-    // componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
-    //     const {productData} = this.props;
-    //     this.setState({productList:productList})
-    // }
+    onRefresh = () => {
+        const {navigation} = this.props;
+        const id = navigation.getParam('id','No-Id');
+        this.setState({refreshing: true});
+        this.props.getsubCategoryByIdOnHome({id}).then(res => {
+            this.setState({refreshing: false});
+        });
+        this.props.getproduct().then(res => {
+            this.setState({refreshing: false});
+        });
+    };
 
     onRowClick = (item) => {
         debugger
@@ -83,24 +80,39 @@ class SubCategory extends Component {
         const {navigate} = this.props.navigation;
         const uri = item.image.split("/");
         let imageUri = 'http://localhost:3000/' + uri[uri.length - 1].toString();
-        if(!item.scid){
+        if (!item.scid) {
             return (
-            <View style={{borderRadius: 10, borderWidth: 0.5, height: 100, width: 100, margin: 10}}>
-                <TouchableOpacity onPress={() => this.onRowClick(item)}>
-                    <Image key={index} source={{uri: imageUri}}
-                           style={{height: '100%', width: '100%',opacity:.7}}/>
-                    <Text style={{alignSelf: 'center',top:40,position: 'absolute',fontSize: 15,fontWeight:'bold',color: 'black'}}>{item.name}</Text>
-
-                </TouchableOpacity>
-            </View>
-            )}else{
-            return (
-                <View style={{borderRadius: 10, borderWidth: 0.5, height: 100, width: 100, margin: 10,marginVertical: 30}}>
+                <View style={{borderRadius: 10, borderWidth: 0.5, height: 100, width: 100, margin: 10}}>
                     <TouchableOpacity onPress={() => this.onRowClick(item)}>
                         <Image key={index} source={{uri: imageUri}}
-                               style={{height: '100%', width: '100%',opacity:1}}/>
+                               style={{height: '100%', width: '100%', opacity: .7}}/>
+                        <Text style={{
+                            alignSelf: 'center',
+                            top: 40,
+                            position: 'absolute',
+                            fontSize: 15,
+                            fontWeight: 'bold',
+                            color: 'black'
+                        }}>{item.name}</Text>
+
+                    </TouchableOpacity>
+                </View>
+            )
+        } else {
+            return (
+                <View style={{
+                    borderRadius: 10,
+                    borderWidth: 0.5,
+                    height: 100,
+                    width: 100,
+                    margin: 10,
+                    marginVertical: 30
+                }}>
+                    <TouchableOpacity onPress={() => this.onRowClick(item)}>
+                        <Image key={index} source={{uri: imageUri}}
+                               style={{height: '100%', width: '100%', opacity: 1}}/>
                         <View>
-                            <Text style={{fontSize:15}}>${item.price}</Text>
+                            <Text style={{fontSize: 15}}>${item.price}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -108,14 +120,12 @@ class SubCategory extends Component {
 
             )
         }
-
     }
-
     render() {
         const {navigation} = this.props;
         return (
             <Container>
-                <Header/>
+
                 <View style={{height:40,backgroundColor:'#ccddff',justifyContent: 'center'}}><Text style={{fontSize:20,fontWeight: 'bold',marginLeft:10}}>SubCategory</Text></View>
                 <View style={{height: 150}}>
                     <FlatList data={this.props.subcategoryList}
@@ -125,6 +135,8 @@ class SubCategory extends Component {
                               automaticallyAdjustContentInsets={false}
                               renderItem={this.renderItem}
                               ListEmptyComponent={this.renderEmpty}
+                              onRefresh={this.onRefresh}
+                              refreshing={this.state.refreshing}
                     />
                 </View>
                 <View style={{height:40,backgroundColor:'#ccddff',justifyContent: 'center'}}><Text style={{fontSize:20,fontWeight: 'bold',marginLeft:10}}>Products</Text></View>
@@ -136,6 +148,8 @@ class SubCategory extends Component {
                               renderItem={this.renderItem}
                               numColumns={3}
                               ListEmptyComponent={this.renderEmpty}
+                              onRefresh={this.onRefresh}
+                              refreshing={this.state.refreshing}
                     />
                 </View>
             </Container>
@@ -152,7 +166,7 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, {
-    getsubCategoryById,
+    getsubCategoryByIdOnHome,
     getproduct,
     getProductById
 })(SubCategory);
