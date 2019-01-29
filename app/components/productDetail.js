@@ -14,6 +14,7 @@ import Constants from "../helper/themeHelper";
 import IconS from 'react-native-vector-icons/SimpleLineIcons';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import IconA from 'react-native-vector-icons/AntDesign'
+import {getitem,itemAdd} from '../actions/addtocartAction';
 
 class ProductDetail extends Component<Props> {
     constructor(props) {
@@ -22,16 +23,24 @@ class ProductDetail extends Component<Props> {
             liked:false
         }
     }
-    storeData = async (ProductData) => {
-        const {navigation} = this.props;
-        try {
-             // await AsyncStorage.setItem('favorite', JSON.stringify(ProductData));
-            var favorite = AsyncStorage.getItem('favorite');
-            AsyncStorage.setItem('favorite', favorite += JSON.stringify(productData));
-        } catch (error) {
-
-            // alert("async error");
-        }
+    storeData = async(productData)=>{
+        const username = await AsyncStorage.getItem('user');
+        const email = JSON.parse(username).email;
+        const formData = new FormData();
+        const uri = productData.image.split("/");
+        let imageUri = 'http://localhost:3000/' + uri[uri.length - 1].toString();
+        formData.append('image', {
+            uri: imageUri,
+            type: 'image/jpeg',
+            name: 'photo.jpg',
+        });
+        formData.append("name", productData.name);
+        formData.append("cid", productData.cid);
+        formData.append("scid", productData.scid);
+        formData.append("price", productData.price);
+        formData.append("detail", productData.detail);
+        formData.append("email", email);
+        this.props.itemAdd(formData)
     }
     render() {
         const productData = this.props.navigation.getParam('detail', 'no');
@@ -75,7 +84,7 @@ class ProductDetail extends Component<Props> {
                     <Text style={{marginLeft: 10, fontSize: 19, marginTop: 10}}>{productData.detail}</Text>
 
                     <TouchableOpacity onPress={()=>{this.setState({liked:true});
-                    this.storeData(productData)
+                     this.storeData(productData)
                     }}
                         style={{alignItems: 'center'}}>
                         <Text style={{
@@ -84,7 +93,7 @@ class ProductDetail extends Component<Props> {
                             fontWeight: 'bold'
                         }}>Add to Cart</Text>
                         <View>
-                            {this.state.liked ? <IconA name="heart" size={25} color="red" />   : <IconA name="hearto" size={25} color="#555" />}
+                            {this.state.liked ? <IconA name="heart" size={25} color="red"/>   : <IconA name="hearto" size={25} color="#555" />}
                             </View>
                     </TouchableOpacity>
 
@@ -97,12 +106,13 @@ class ProductDetail extends Component<Props> {
 const styles = StyleSheet.create({});
 
 const mapStateToProps = (state) => {
-    const {loading} = state.product;
+    const {loading} = state.addtocart;
     return {
         loading
     };
 };
 
 export default connect(mapStateToProps, {
-
+    getitem,
+    itemAdd
 })(ProductDetail);

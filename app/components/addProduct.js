@@ -60,10 +60,11 @@ class AddProduct extends Component {
     }
 
     addproduct = async () => {
+        debugger
          if (!this.validation()) {
             const username = await AsyncStorage.getItem('user');
             const email = JSON.parse(username).email;
-            const {name, quntity, price, detail, cid, scid, image} = this.state;
+            const {name, price, detail, cid, scid, image} = this.state;
             const formData = new FormData();
             formData.append('image', {
                 uri: image,
@@ -73,7 +74,7 @@ class AddProduct extends Component {
             formData.append("name", name);
             formData.append("cid", cid);
             formData.append("scid", scid);
-            formData.append("quntity", quntity);
+            // formData.append("quantity", quntity);
             formData.append("price", price);
             formData.append("detail", detail);
             formData.append("email", email);
@@ -147,10 +148,10 @@ class AddProduct extends Component {
                             <Input placeholder='Product Name' onChangeText={(name) => this.setState({name})}
                                    placeholderTextColor="#80aaff" style={{color: '#1a62ff'}}/>
                         </Item>
-                        <Item>
-                            <Input placeholder='Quntity' onChangeText={(quntity) => this.setState({quntity})}
-                                   placeholderTextColor="#80aaff" style={{color: '#1a62ff'}}/>
-                        </Item>
+                        {/*<Item>*/}
+                            {/*<Input placeholder='Quntity' onChangeText={(quntity) => this.setState({quntity})}*/}
+                                   {/*placeholderTextColor="#80aaff" style={{color: '#1a62ff'}}/>*/}
+                        {/*</Item>*/}
                         <Item>
                             <IconF name='price-tag' style={{color: '#003399'}} size={30}/>
                             <Input placeholder='Price' onChangeText={(price) => this.setState({price})}

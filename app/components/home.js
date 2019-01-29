@@ -72,7 +72,7 @@ class Home extends Component{
         return (
             <View style={{flex: 1, borderRadius: 10, borderWidth: 1,height:100,width:100,margin:10}}>
                 <TouchableOpacity onPress={()=>this.onRowClick(item)}>
-                    <Image key={index} source={{uri: imageUri}}
+                    <Image source={{uri: imageUri}}
                            style={{height: '100%', width: '100%',opacity:.5}}/>
                     <Text style={{alignSelf: 'center',top:40,position: 'absolute',fontSize: 15,fontWeight:'bold',color: 'black'}}>{item.name}</Text>
                     </TouchableOpacity>
@@ -110,6 +110,7 @@ class Home extends Component{
                               ListEmptyComponent={this.renderEmpty}
                               onRefresh={this.onRefresh}
                               refreshing={this.state.refreshing}
+                              keyExtractor={this.keyExtractor}
                     />
             </Container>
         );

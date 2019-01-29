@@ -6,5 +6,6 @@ module.exports = {
     category:'categories/',
     subcategory:'subcategories/',
     email:'email/',
-    update:'update/'
+    update:'update/',
+    addtocart:'addtocarts/'
 };

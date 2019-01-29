@@ -159,20 +159,22 @@ class SubCategory extends Component {
                               ListEmptyComponent={this.renderEmpty}
                               onRefresh={this.onRefresh}
                               refreshing={this.state.refreshing}
+                              keyExtractor={this.keyExtractor}
                     />
                 </View>
                 <View style={{height:40,backgroundColor:'#ccddff',justifyContent: 'center'}}><Text style={{fontSize:20,fontWeight: 'bold',marginLeft:10}}>{this.state.title}</Text></View>
                 <View style={{flex: 1}}>
                     <FlatList data={this.props.productList}
-                              horizontal={true}
+                              horizontal={false}
                               // style={{width:Constants.screenWidth}}
-                              contentContainerStyle={{top: 10,flexWrap:'wrap',width:Constants.screenWidth}}
+                              contentContainerStyle={{top: 10}}
                               automaticallyAdjustContentInsets={true}
                               renderItem={this.renderItem}
-                              // numColumns={3}
+                              numColumns={3}
                               ListEmptyComponent={this.renderEmpty}
                               onRefresh={this.onRefresh}
                               refreshing={this.state.refreshing}
+                              keyExtractor={this.keyExtractor}
                     />
                 </View>
                 </ScrollView>

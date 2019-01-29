@@ -35,7 +35,6 @@ class Account extends Component {
     }
 
     conformationLogout(){
-        debugger
         Alert.alert(
             'Log out',
             'Are you sure?',
@@ -47,7 +46,6 @@ class Account extends Component {
         )
     }
     conformationDeleteAccount(){
-        debugger
         Alert.alert(
             'Delete Account',
             'Are you sure?',
