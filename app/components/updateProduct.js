@@ -3,7 +3,7 @@ import {ScrollView, Text, TouchableOpacity, Image, Picker, AsyncStorage} from 'r
 import {View, Left, Right, Button, Container, Item, Input, Body,Header} from 'native-base';
 import {connect} from "react-redux";
 import ImagePicker from 'react-native-image-picker';
-import {getproduct, productAdd} from "../actions/productAction";
+import {getproduct, productUpdate} from "../actions/productAction";
 import {NavigationActions, StackActions} from "react-navigation";
 import Icon from 'react-native-vector-icons/Feather'
 import IconF from 'react-native-vector-icons/Foundation'
@@ -14,11 +14,12 @@ import * as Animatable from 'react-native-animatable';
 import IconS from 'react-native-vector-icons/SimpleLineIcons';
 import Constants from "../helper/themeHelper";
 
-class AddProduct extends Component {
+class UpdateProduct extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: '',
+            // productData: props.navigation.state.params.data,
+             name: '',
             price: 0,
             quntity: 1,
             detail: '',
@@ -27,14 +28,24 @@ class AddProduct extends Component {
             type: false,
             hasError: false,
             errorText: '',
-            cid: '5',
+            cid: '',
             selected: "",
-            scid: '5',
+            scid: '',
             categoryList: [],
             subcategoryList: []
         };
     }
+    componentDidMount() {
+        const productData = this.props.navigation.getParam('data', 'no');
+        this.setState({name:productData.name})
+        this.setState({quntity:productData.quntity})
+        this.setState({scid:productData.scid})
+        this.setState({cid:productData.cid})
+        this.setState({price:productData.price})
+        this.setState({detail:productData.detail})
 
+        this.props.getcategory();
+    }
     image = () => {
         try {
             ImagePicker.showImagePicker({}, (response) => {
@@ -48,7 +59,7 @@ class AddProduct extends Component {
                     console.log('User tapped custom button: ', response.customButton);
                 } else {
                     const source = {uri: response.uri};
-                        this.setState({
+                    this.setState({
                         image: source,
                     });
                 }
@@ -59,8 +70,8 @@ class AddProduct extends Component {
         }
     }
 
-    addproduct = async () => {
-         if (!this.validation()) {
+    updateProduct = async (id) => {
+        if (!this.validation()) {
             const username = await AsyncStorage.getItem('user');
             const email = JSON.parse(username).email;
             const {name, quntity, price, detail, cid, scid, image} = this.state;
@@ -77,22 +88,18 @@ class AddProduct extends Component {
             formData.append("price", price);
             formData.append("detail", detail);
             formData.append("email", email);
-            this.props.productAdd(formData).then(res => {
+            this.props.productUpdate(formData,id).then(res => {
                 const {navigation} = this.props;
                 navigation.dispatch(StackActions.reset({
                     index: 0,
                     actions: [NavigationActions.navigate({routeName: 'AdminTabNavigator'})],
 
                 }));
-                alert("Product added successfully");
+                alert("Product updated successfully");
             }).catch(err => {
                 alert("failed")
             })
-         }
-    }
-
-    componentDidMount() {
-        this.props.getcategory();
+        }
     }
 
     getSubCategoryData(value) {
@@ -102,6 +109,7 @@ class AddProduct extends Component {
     render() {
         const {categoryList} = this.props;
         const {subcategoryList} = this.props;
+        const productData = this.props.navigation.getParam('data', 'no');
         return (
             <Container>
                 <Header style={{backgroundColor:'#8080ff'}}>
@@ -127,7 +135,7 @@ class AddProduct extends Component {
                 </Header>
                 <ScrollView>
                     <Animatable.View animation="fadeInUpBig"
-                        style={{justifyContent: 'center', marginLeft: 25, marginRight: 25, top: 30}}>
+                                     style={{justifyContent: 'center', marginLeft: 25, marginRight: 25, top: 30}}>
                         <View style={{alignItems: "center", width: '100%', marginTop: 20}}>
                             <TouchableOpacity onPress={() => {
                                 this.image()
@@ -145,20 +153,20 @@ class AddProduct extends Component {
                         <Item style={{marginTop: 30}}>
                             <Icon name='shopping-bag' style={{color: '#003399'}} size={30}/>
                             <Input placeholder='Product Name' onChangeText={(name) => this.setState({name})}
-                                   placeholderTextColor="#80aaff" style={{color: '#1a62ff'}}/>
+                                   placeholderTextColor="#80aaff" style={{color: '#1a62ff'}} value={this.state.name}/>
                         </Item>
                         <Item>
                             <Input placeholder='Quntity' onChangeText={(quntity) => this.setState({quntity})}
-                                   placeholderTextColor="#80aaff" style={{color: '#1a62ff'}}/>
+                                   placeholderTextColor="#80aaff" style={{color: '#1a62ff'}} value={this.state.quntity}/>
                         </Item>
                         <Item>
                             <IconF name='price-tag' style={{color: '#003399'}} size={30}/>
                             <Input placeholder='Price' onChangeText={(price) => this.setState({price})}
-                                   placeholderTextColor="#80aaff" style={{color: '#1a62ff'}}/>
+                                   placeholderTextColor="#80aaff" style={{color: '#1a62ff'}} value={this.state.price}/>
                         </Item>
                         <Item>
                             <Input placeholder='Detail' onChangeText={(detail) => this.setState({detail})}
-                                   placeholderTextColor="#80aaff" style={{color: '#1a62ff'}}/>
+                                   placeholderTextColor="#80aaff" style={{color: '#1a62ff'}} value={this.state.detail}/>
                         </Item>
 
                         <Text style={{
@@ -177,7 +185,8 @@ class AddProduct extends Component {
                             onValueChange={(value) => {
                                 this.setState({cid: value});
                                 this.getSubCategoryData(value);
-                            }}>
+                            }}
+                            value={this.state.cid}>
                             {
                                 categoryList.map((item, index) => {
                                     return (<Picker.Item label={item.name} value={item.id} key={index}/>)
@@ -198,7 +207,8 @@ class AddProduct extends Component {
                             selectedValue={this.state.scid}
                             onValueChange={(value) => {
                                 this.setState({scid: value});
-                            }}>
+                            }}
+                            value={this.state.scid}>
                             {
                                 subcategoryList.map((item, index) => {
                                     return (<Picker.Item label={item.name} value={item.id} key={index}/>)
@@ -225,7 +235,7 @@ class AddProduct extends Component {
                                 alignItems: 'center',
                                 borderRadius: 5, width: "100%", justifyContent: 'center'
                             }}>
-                                <TouchableOpacity onPress={() => this.addproduct()}>
+                                <TouchableOpacity onPress={() => this.updateProduct(productData.id)}>
                                     <Text style={{
                                         color: '#002066',
                                         textAlign: 'center',
@@ -233,7 +243,7 @@ class AddProduct extends Component {
                                         fontSize: 22,
                                         fontWeight: 'bold',
                                         marginBottom:25
-                                    }}>Add Product</Text>
+                                    }}>Update Product</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -265,7 +275,8 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps, {
     getproduct,
-    productAdd,
+    productUpdate,
     getcategory,
     getsubCategoryById
-})(AddProduct);
+})(UpdateProduct);
+//API issue

@@ -1,29 +1,24 @@
 import React, {Component} from 'react';
-import {TouchableOpacity, StyleSheet, Text, AsyncStorage} from "react-native";
+import {TouchableOpacity, StyleSheet, Text, AsyncStorage,Alert} from "react-native";
 import {Container, Content, View} from 'native-base';
-import {Title} from "react-native-paper";
 import {deleteUser} from '../actions/userAction';
 import {connect} from "react-redux";
 import Header from './commonHeader';
-import Dialog, { DialogContent } from 'react-native-popup-dialog';
 
 class Account extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-        }
     }
-    async logout(username) {
-        try {
-            await AsyncStorage.removeItem('user');
-            this.props.navigation.navigate('Login')
-        }
-        catch(error) {
-            console.log(error)
-        }
+    async logout() {
+            try {
+                await AsyncStorage.removeItem('user');
+                this.props.navigation.navigate('Login')
+            }
+            catch(error) {
+                console.log(error)
+            }
     }
     getData = async () => {
-        debugger
         try {
             const value = await AsyncStorage.getItem('user');
             const email = (JSON.parse(value).login);
@@ -39,6 +34,30 @@ class Account extends Component {
         }
     }
 
+    conformationLogout(){
+        debugger
+        Alert.alert(
+            'Log out',
+            'Are you sure?',
+            [
+                {text: 'Cancel'},
+                {text: 'OK', onPress: () => {this.logout()}},
+            ],
+            { cancelable: false }
+        )
+    }
+    conformationDeleteAccount(){
+        debugger
+        Alert.alert(
+            'Delete Account',
+            'Are you sure?',
+            [
+                {text: 'Cancel'},
+                {text: 'OK', onPress: () => {this.getData()}},
+            ],
+            { cancelable: false }
+        )
+    }
     render() {
         return (
             <Container>
@@ -48,10 +67,10 @@ class Account extends Component {
                         <TouchableOpacity style={styles.container} onPress={()=>{this.props.navigation.navigate('UserRegistration')}}>
                             <Text style={styles.text}>Profile</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.container} onPress={()=>{this.logout()}}>
+                        <TouchableOpacity style={styles.container} onPress={()=>{this.conformationLogout()}}>
                             <Text style={styles.text}>Logout</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.container} onPress={()=>{this.getData()}}>
+                        <TouchableOpacity style={styles.container} onPress={()=>{this.conformationDeleteAccount()}}>
                             <Text style={styles.text}>Delete Account</Text>
                         </TouchableOpacity>
 

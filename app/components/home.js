@@ -12,8 +12,9 @@ import {
 } from 'react-native';
 import {connect} from 'react-redux';
 import {getcategory} from '../actions/categoryAction';
-import {Container, Left,Body,Right} from "native-base";
-import Header from '../components/commonHeader';
+import {Container, Left,Body,Right,Header} from "native-base";
+import Constants from "../helper/themeHelper";
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 class Home extends Component{
     static defaultNavigationOptions = {
@@ -61,7 +62,7 @@ class Home extends Component{
     };
 
     onRowClick = (item) => {
-         this.props.navigation.navigate('SubCategory',{id: item.id});
+         this.props.navigation.navigate('SubCategory',{id: item});
     };
 
     renderItem = ({item, index}) => {
@@ -84,7 +85,21 @@ class Home extends Component{
 
         return (
             <Container>
-                <Header/>
+                <Header style={{backgroundColor:'#8080ff'}}>
+                    <Left/>
+                    <Body>
+                    <Text style={{fontSize:20,fontWeight:'bold',color:'white',marginLeft: 30,top:-5}}>Unique</Text>
+                    </Body>
+                    <Right/>
+
+                    <TouchableOpacity
+                        style={{marginTop: Constants.screenHeight * 0.01}}
+                         onPress={() => {this.props.navigation.navigate('AddToCart')}}
+                    >
+                        <Icon name={'cart-outline'} size={30} color={'white'}/>
+                    </TouchableOpacity>
+
+                </Header>
                 <View style={{height:40,backgroundColor:'#ccddff',justifyContent: 'center'}}><Text style={{fontSize:20,fontWeight: 'bold',marginLeft:10}}>Category</Text></View>
                     <FlatList data={categoryList}
                               horizontal={false}

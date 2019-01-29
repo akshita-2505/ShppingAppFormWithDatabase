@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {ScrollView, Text, TouchableOpacity,StyleSheet} from 'react-native';
 import {View, Left, Right, Button, Container, Item, Input} from 'native-base';
 import Header from '../components/commonHeader';
+import * as Animatable from 'react-native-animatable';
 
 export default class AdminChoise extends Component {
     constructor(props) {
@@ -13,7 +14,7 @@ export default class AdminChoise extends Component {
             <Container>
                 <Header/>
 
-                    <View style={{flex:1,justifyContent: 'center', marginLeft: 25, marginRight: 25, top: 30,alignItems: 'center'}}>
+                    <Animatable.View animation="zoomIn" style={{flex:1,justifyContent: 'center', marginLeft: 25, marginRight: 25, top: 30,alignItems: 'center'}}>
 
                             <View style={[styles.container,{height:40,width:200 }]}>
                                 <TouchableOpacity onPress={() => this.props.navigation.navigate('AddProduct')}>
@@ -25,7 +26,7 @@ export default class AdminChoise extends Component {
                                 <Text style={styles.text}>Show Product</Text>
                             </TouchableOpacity>
                         </View>
-                    </View>
+                    </Animatable.View>
 
             </Container>
         );

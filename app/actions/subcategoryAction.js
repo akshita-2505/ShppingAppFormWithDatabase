@@ -44,7 +44,7 @@ export const getsubCategoryById = (userData) => {
 export const getsubCategoryByIdOnHome = (userData) => {
     return (dispatch, getState) => {
         dispatch({type: SET_LOADER,payload: true});
-        return fetch(ApiConstant.baseUrl+ApiConstant.subcategory + userData.id)
+        return fetch(ApiConstant.baseUrl+ApiConstant.subcategory + userData)
             .then((response) => response.json())
             .then((responseJson) => {
                 dispatch({type: SET_LOADER,payload: false});

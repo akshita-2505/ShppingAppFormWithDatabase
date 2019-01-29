@@ -11,9 +11,11 @@ import {
     SafeAreaView
 } from 'react-native';
 import {connect} from 'react-redux';
-import {getadminproduct} from '../actions/productAction';
-import {Container, Left,Body,Right} from "native-base";
-import Header from '../components/commonHeader';
+import {getProductByEmail} from '../actions/productAction';
+import {Container, Left,Body,Right,Header} from "native-base";
+import Constants from "../helper/themeHelper";
+import IconS from 'react-native-vector-icons/SimpleLineIcons';
+import IconM from 'react-native-vector-icons/MaterialCommunityIcons'
 
 class ShowAdminProduct extends Component{
     static defaultNavigationOptions = {
@@ -23,7 +25,8 @@ class ShowAdminProduct extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            productList: []
+            productList: [],
+            refreshing:false,
         }
     }
 
@@ -37,16 +40,18 @@ class ShowAdminProduct extends Component{
 
     getData = async () => {
         try {
-            const value = await AsyncStorage.getItem('user');
-            const email = (JSON.parse(value).login);
-            alert(email)
-            debugger
-            this.props.getadminproduct(email)
-        }catch(error){
-            alert("no")
+            const username = await AsyncStorage.getItem('user');
+            const email = JSON.parse(username).email;
+            if (email !== null) {
+                    this.props.getProductByEmail(email);
+                this.setState({refreshing: false});
+            } else {
+                this.props.navigation.navigate('Login')
+            }
+        } catch (error) {
+            console.log(error)
         }
     }
-
 
     renderSeparator = ({leadingItem, section}) => {
         return <View style={{height: 2}}/>;
@@ -60,27 +65,32 @@ class ShowAdminProduct extends Component{
         </View>
     };
 
-    // onRefresh = () => {
-    //     this.setState({refreshing: true});
-    //     this.props.getcategory().then(res => {
-    //         this.setState({refreshing: false});
-    //     });
-    // };
+    onRefresh = () => {
+        this.setState({refreshing: true});
+        this.getData()
+    };
 
-    // onRowClick = (item) => {
-    //     this.props.navigation.navigate('SubCategory',{id: item.id});
-    // };
+    onRowClick = (item) => {
+           this.props.navigation.navigate('AdminProductDetail',{detail: item});
+    };
 
     renderItem = ({item, index}) => {
         const {navigate} = this.props.navigation;
         const uri = item.image.split("/");
         let imageUri = 'http://localhost:3000/' + uri[uri.length - 1].toString();
         return (
-            <View style={{flex: 1, borderRadius: 10, borderWidth: 1,height:100,width:100,margin:10}}>
-                <TouchableOpacity onPress={()=>this.onRowClick(item)}>
+            <View style={{
+                height: 100,
+                width: 100,
+                margin: 10,
+                marginVertical: 30
+            }}>
+                <TouchableOpacity onPress={() => this.onRowClick(item)}>
                     <Image key={index} source={{uri: imageUri}}
-                           style={{height: '100%', width: '100%',opacity:.5}}/>
-                    <Text style={{alignSelf: 'center',top:40,position: 'absolute',fontSize: 15,fontWeight:'bold',color: 'black'}}>{item.name}</Text>
+                           style={{height: '100%', width: '100%', opacity: 1}}/>
+                    <View>
+                        <Text style={{fontSize: 15}}>${item.price}</Text>
+                    </View>
                 </TouchableOpacity>
             </View>
         )
@@ -91,7 +101,27 @@ class ShowAdminProduct extends Component{
 
         return (
             <Container>
-                <Header/>
+                <Header style={{backgroundColor:'#8080ff'}}>
+                    <TouchableOpacity
+                        style={{marginTop: Constants.screenHeight * 0.01}}
+                        onPress={() => {this.props.navigation.navigate('AdminTabNavigator')
+                        }}>
+                        <IconS name={'arrow-left'} size={20} color={'white'}/>
+                    </TouchableOpacity>
+                    <Left/>
+                    <Body>
+                    <Text style={{fontSize:20,fontWeight:'bold',color:'white',marginLeft: 30,top:-5}}>Unique</Text>
+                    </Body>
+                    <Right/>
+
+                    <TouchableOpacity
+                        style={{marginTop: Constants.screenHeight * 0.01}}
+                        onPress={() => {
+                        }}>
+                        <IconM name={'cart-outline'} size={30} color={'white'}/>
+                    </TouchableOpacity>
+
+                </Header>
                 <FlatList data={productList}
                           horizontal={false}
                           contentContainerStyle={{top: 10}}
@@ -99,6 +129,8 @@ class ShowAdminProduct extends Component{
                           renderItem={this.renderItem}
                           numColumns={3}
                           ListEmptyComponent={this.renderEmpty}
+                          onRefresh={this.onRefresh}
+                          refreshing={this.state.refreshing}
                 />
             </Container>
         );
@@ -113,5 +145,5 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, {
-    getadminproduct,
+    getProductByEmail,
 })(ShowAdminProduct);

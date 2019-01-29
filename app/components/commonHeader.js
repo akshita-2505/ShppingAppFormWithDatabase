@@ -13,22 +13,15 @@ export default class CommonHeader extends Component {
     render() {
         return (
             <Header style={{backgroundColor:'#8080ff'}}>
-                {/*<Text style={{fontSize:20,fontWeight:'bold',color:'white',marginLeft: 30,top:10}}>Unique</Text>*/}
-                {/*<TouchableOpacity onPress={() => {*/}
-                {/*}}>*/}
-                {/*<Icon name={'cart-outline'} size={30} color={'white'} style={{top:10,paddingRight: 10}}/>*/}
-                {/*</TouchableOpacity>*/}
                 <Left/>
                 <Body>
                 <Text style={{fontSize:20,fontWeight:'bold',color:'white',marginLeft: 30,top:-5}}>Unique</Text>
-                {/*<Title>Home</Title>*/}
                 </Body>
                 <Right/>
 
                 <TouchableOpacity
                     style={{marginTop: Constants.screenHeight * 0.01}}
-                    onPress={() => {
-                }}>
+                    onPress={() => {this.props.navigation.navigate('AddToCart')}}>
                     <Icon name={'cart-outline'} size={30} color={'white'}/>
                 </TouchableOpacity>
 

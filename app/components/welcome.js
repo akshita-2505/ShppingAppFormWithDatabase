@@ -7,14 +7,13 @@ import {
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import ThemeColor from './themeColor';
-import {Header} from "react-native-elements";
-import {Container} from "native-base";
 
 export default class Welcome extends Component {
     constructor(props) {
         super(props);
     }
     componentWillMount(): void {
+        // setTimeout(this.getData(), 1000)
         this.getData()
     }
 
@@ -29,6 +28,9 @@ export default class Welcome extends Component {
                 } else if (JSON.parse(username).type == true) {
 
                     this.props.navigation.navigate('AdminTabNavigator')
+                }
+                else {
+                    this.props.navigation.navigate('Login')
                 }
             } else {
                  this.props.navigation.navigate('Login')

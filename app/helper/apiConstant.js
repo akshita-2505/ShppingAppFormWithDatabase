@@ -4,5 +4,7 @@ module.exports = {
     login :'login/',
     product:'products/',
     category:'categories/',
-    subcategory:'subcategories/'
+    subcategory:'subcategories/',
+    email:'email/',
+    update:'update/'
 };

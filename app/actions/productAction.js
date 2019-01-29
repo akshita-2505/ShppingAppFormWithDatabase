@@ -25,10 +25,29 @@ export const getproduct = () => {
             });
     };
 };
+export const getProductByEmail = (userData) => {
+    debugger
+    return (dispatch, getState) => {
+        dispatch({type: SET_LOADER,payload: true});
+        return fetch(ApiConstant.baseUrl+ApiConstant.product+ApiConstant.email + (userData))
+            .then((response) => response.json())
+            .then((responseJson) => {
+                dispatch({type: SET_LOADER,payload: false});
+                dispatch({
+                    type: SET_PRODUCT_DATA,
+                    payload: responseJson.data
+                });
+                return Promise.resolve(true);
+            })
+            .catch((error) => {
+                alert(error);
+            });
+    };
+};
 export const getProductById = (userData) => {
     return (dispatch, getState) => {
         dispatch({type: SET_LOADER,payload: true});
-        return fetch(ApiConstant.baseUrl+ApiConstant.product + (userData.id))
+        return fetch(ApiConstant.baseUrl+ApiConstant.product + (userData))
             .then((response) => response.json())
             .then((responseJson) => {
                 dispatch({type: SET_LOADER,payload: false});
@@ -101,25 +120,23 @@ export const productdelete = (id) => {
             });
     };
 };
-
-
 export const productUpdate = (productData,id) => {
-
+    debugger
     return (dispatch, getState) => {
         dispatch({type: SET_LOADER,payload: true});
-        return fetch(ApiConstant.baseUrl+ApiConstant.product+(id),
+        return fetch(ApiConstant.baseUrl+ApiConstant.product+ApiConstant.update+(id),
             {
                 method : 'PATCH',
                 headers : {
                     'Accept': 'application/json',
-                    'Content-Type': 'application/json'
+                    'Content-Type' : 'multipart/form-data',
                 },
-                body: JSON.stringify(productData)
+                body:productData
             }).then((response) => response.json())
             .then((responseJson) => {
                 dispatch({type: SET_LOADER,payload: false});
                 dispatch({
-                    type: UPDATE_PRODUCT_DATA,
+                    type: SET_PRODUCT_DATA,
                     payload: responseJson.result
                 });
                 return Promise.resolve(responseJson);
@@ -133,4 +150,5 @@ export const productUpdate = (productData,id) => {
             });
     };
 };
+
 

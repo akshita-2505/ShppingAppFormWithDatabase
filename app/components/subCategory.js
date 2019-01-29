@@ -9,21 +9,24 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import {connect} from 'react-redux';
-import Header from '../components/commonHeader';
-import {Container, Left, Body, Right} from "native-base";
+import {Container, Left, Body, Right,Header} from "native-base";
 import {getsubCategoryByIdOnHome} from '../actions/subcategoryAction';
 import {getproduct,getProductById} from '../actions/productAction';
+import Constants from "../helper/themeHelper";
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import IconS from 'react-native-vector-icons/SimpleLineIcons';
 
 class SubCategory extends Component {
-    static navigationOptions = {
-        headerMode:'float'
-    };
+    // static navigationOptions = {
+    //     headerMode:'float'
+    // };
     constructor(props) {
         super(props);
         this.state = {
             refreshing: false,
             productList: [],
-            subcategoryList: []
+            subcategoryList: [],
+            title:'All Products'
         }
     }
 
@@ -33,9 +36,9 @@ class SubCategory extends Component {
 
     componentDidMount() {
         const {navigation} = this.props;
-        const id = navigation.getParam('id','No-Id');
-        this.props.getsubCategoryByIdOnHome({id})
-        this.props.getproduct()
+        const item = navigation.getParam('id','No-Id');
+        this.props.getsubCategoryByIdOnHome(item.id)
+        this.props.getProductById(item.id)
     }
 
     renderSeparator = ({leadingItem, section}) => {
@@ -52,9 +55,9 @@ class SubCategory extends Component {
 
     onRefresh = () => {
         const {navigation} = this.props;
-        const id = navigation.getParam('id','No-Id');
+        const item = navigation.getParam('id','No-Id');
         this.setState({refreshing: true});
-        this.props.getsubCategoryByIdOnHome({id}).then(res => {
+        this.props.getsubCategoryByIdOnHome(item.id).then(res => {
             this.setState({refreshing: false});
         });
         this.props.getproduct().then(res => {
@@ -63,11 +66,10 @@ class SubCategory extends Component {
     };
 
     onRowClick = (item) => {
-        debugger
         const {navigation} = this.props;
+        this.setState({title:item.name})
         if(item.scid == undefined){
-            var id = item.id
-            this.props.getProductById({id}).then(res => {
+            this.props.getProductById(item.id).then(res => {
             }).catch(err => {
                 alert("failed")
             })
@@ -101,8 +103,8 @@ class SubCategory extends Component {
         } else {
             return (
                 <View style={{
-                    borderRadius: 10,
-                    borderWidth: 0.5,
+                    // borderRadius: 10,
+                    // borderWidth: 0.5,
                     height: 100,
                     width: 100,
                     margin: 10,
@@ -116,17 +118,37 @@ class SubCategory extends Component {
                         </View>
                     </TouchableOpacity>
                 </View>
-
-
             )
         }
     }
     render() {
         const {navigation} = this.props;
+        const item = navigation.getParam('id','No-Id');
         return (
             <Container>
+                <Header style={{backgroundColor:'#8080ff'}}>
+                    <TouchableOpacity
+                        style={{marginTop: Constants.screenHeight * 0.01}}
+                        onPress={() => {this.props.navigation.navigate('Home')
+                        }}>
+                        <IconS name={'arrow-left'} size={20} color={'white'}/>
+                    </TouchableOpacity>
+                    <Left/>
+                    <Body>
+                    <Text style={{fontSize:20,fontWeight:'bold',color:'white',marginLeft: 30,top:-5}}>Unique</Text>
+                    </Body>
+                    <Right/>
 
-                <View style={{height:40,backgroundColor:'#ccddff',justifyContent: 'center'}}><Text style={{fontSize:20,fontWeight: 'bold',marginLeft:10}}>SubCategory</Text></View>
+                    <TouchableOpacity
+                        style={{marginTop: Constants.screenHeight * 0.01}}
+                        // onPress={() => {this.props.navigation.navigate('AddToCart')}}
+                        >
+                        <Icon name={'cart-outline'} size={30} color={'white'}/>
+                    </TouchableOpacity>
+
+                </Header>
+                <ScrollView>
+                <View style={{height:40,backgroundColor:'#ccddff',justifyContent: 'center'}}><Text style={{fontSize:20,fontWeight: 'bold',marginLeft:10}}>{item.name}</Text></View>
                 <View style={{height: 150}}>
                     <FlatList data={this.props.subcategoryList}
                               horizontal={true}
@@ -139,19 +161,21 @@ class SubCategory extends Component {
                               refreshing={this.state.refreshing}
                     />
                 </View>
-                <View style={{height:40,backgroundColor:'#ccddff',justifyContent: 'center'}}><Text style={{fontSize:20,fontWeight: 'bold',marginLeft:10}}>Products</Text></View>
+                <View style={{height:40,backgroundColor:'#ccddff',justifyContent: 'center'}}><Text style={{fontSize:20,fontWeight: 'bold',marginLeft:10}}>{this.state.title}</Text></View>
                 <View style={{flex: 1}}>
                     <FlatList data={this.props.productList}
-                              horizontal={false}
-                              contentContainerStyle={{top: 5}}
-                              automaticallyAdjustContentInsets={false}
+                              horizontal={true}
+                              // style={{width:Constants.screenWidth}}
+                              contentContainerStyle={{top: 10,flexWrap:'wrap',width:Constants.screenWidth}}
+                              automaticallyAdjustContentInsets={true}
                               renderItem={this.renderItem}
-                              numColumns={3}
+                              // numColumns={3}
                               ListEmptyComponent={this.renderEmpty}
                               onRefresh={this.onRefresh}
                               refreshing={this.state.refreshing}
                     />
                 </View>
+                </ScrollView>
             </Container>
         );
     }
