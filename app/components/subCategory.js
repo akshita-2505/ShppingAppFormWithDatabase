@@ -141,7 +141,7 @@ class SubCategory extends Component {
 
                     <TouchableOpacity
                         style={{marginTop: Constants.screenHeight * 0.01}}
-                        // onPress={() => {this.props.navigation.navigate('AddToCart')}}
+                         onPress={() => {this.props.navigation.navigate('AddToCart')}}
                         >
                         <Icon name={'cart-outline'} size={30} color={'white'}/>
                     </TouchableOpacity>
